@@ -26,7 +26,7 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; font-size: 16px; }
+html { scroll-behavior: smooth; font-size: 16px; overflow-x: hidden; }
 
 body {
   font-family: 'DM Sans', sans-serif;
@@ -34,6 +34,7 @@ body {
   color: var(--ink);
   overflow-x: hidden;
   cursor: default;
+  max-width: 100vw;
 }
 
 /* ── NAV ── */
@@ -247,7 +248,6 @@ nav.stuck {
 }
 .about-body strong { color: var(--ink); font-weight: 500; }
 
-/* Achievements - redesigned as a proper timeline/list */
 .about-feats {
   margin-top: 48px; padding-top: 40px;
   border-top: 1px solid var(--border);
@@ -319,7 +319,7 @@ nav.stuck {
   line-height: 1.75; position:relative; z-index:1; transition: color .4s;
 }
 
-/* ── CONSULTATION SECTION (NEW — inside what I do area) ── */
+/* ── CONSULTATION SECTION ── */
 #consultation { background: var(--white); }
 .consult-heading-row {
   display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 72px;
@@ -334,7 +334,6 @@ nav.stuck {
   color: var(--stone-light); text-align: right; max-width: 160px;
 }
 
-/* Three consultation options side by side */
 .consult-options {
   display: grid; grid-template-columns: repeat(3, 1fr);
   gap: 2px; margin-bottom: 80px;
@@ -383,7 +382,6 @@ nav.stuck {
 }
 .co-divider { height: 1px; background: var(--border); margin: 28px 0; }
 
-/* Hover reveal — what they get */
 .co-reveal {
   position: absolute; inset: 0;
   background: var(--ink); color: var(--white);
@@ -437,7 +435,6 @@ nav.stuck {
 }
 .co-reveal-service-item:last-child { border-bottom: none; }
 
-/* Consultation form below */
 .consult-form-section {
   background: var(--off-white); padding: 64px;
   margin-top: 2px;
@@ -578,8 +575,6 @@ nav.stuck {
   font-size: 14px; color: var(--ink);
   border-top: 1px solid var(--border); padding-top: 20px;
 }
-
-/* travel section removed */
 
 /* ── PRESS / NEWSPAPER ── */
 #press { background: var(--ink-soft); position: relative; overflow: hidden; }
@@ -774,48 +769,6 @@ nav.stuck {
   color: var(--stone-light);
 }
 
-/* 6-image grid for life beyond work */
-.gallery-six {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: auto auto;
-  gap: 12px;
-}
-.g-item {
-  position: relative; overflow: hidden;
-  cursor: pointer;
-}
-.g-item:first-child { grid-column: span 2; }
-.g-item img {
-  width: 100%; display: block; height: 100%; object-fit: cover;
-  filter: grayscale(100%) brightness(.95) contrast(1.1);
-  transition: filter .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1);
-}
-.g-item:hover img {
-  filter: grayscale(0%) brightness(1) contrast(1.02);
-  transform: scale(1.04);
-}
-.g-ph {
-  width: 100%; background: var(--mist);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 10px; letter-spacing: .2em; text-transform: uppercase;
-  color: var(--stone-light); font-family: 'Syne', sans-serif;
-  min-height: 260px;
-}
-.g-ph.tall { min-height: 340px; }
-.g-overlay {
-  position: absolute; inset: 0;
-  background: linear-gradient(to top, rgba(15,14,12,.6) 0%, transparent 50%);
-  opacity: 0; transition: opacity .4s;
-  display: flex; align-items: flex-end; padding: 14px;
-}
-.g-item:hover .g-overlay { opacity: 1; }
-.g-label {
-  font-size: 10px; letter-spacing: .15em; text-transform: uppercase;
-  color: rgba(255,255,255,.8);
-}
-
-/* Social handles at bottom of gallery */
 .gallery-social-row {
   margin-top: 48px; padding-top: 48px; border-top: 1px solid var(--border);
 }
@@ -930,21 +883,18 @@ footer {
 .rv.d3 { transition-delay: .26s; } .rv.d4 { transition-delay: .34s; }
 .rv.d5 { transition-delay: .42s; }
 
-/* Slide-in from left */
 .rv-left {
   opacity:0; transform: translateX(-48px);
   transition: opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1);
 }
 .rv-left.on { opacity:1; transform:translateX(0); }
 
-/* Scale in */
 .rv-scale {
   opacity:0; transform: scale(.94);
   transition: opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1);
 }
 .rv-scale.on { opacity:1; transform:scale(1); }
 
-/* Stagger children */
 .rv-stagger > * {
   opacity:0; transform: translateY(28px);
   transition: opacity .65s cubic-bezier(.16,1,.3,1), transform .65s cubic-bezier(.16,1,.3,1);
@@ -955,7 +905,6 @@ footer {
 .rv-stagger.on > *:nth-child(4) { opacity:1; transform:translateY(0); transition-delay:.26s; }
 .rv-stagger.on > *:nth-child(5) { opacity:1; transform:translateY(0); transition-delay:.33s; }
 .rv-stagger.on > *:nth-child(6) { opacity:1; transform:translateY(0); transition-delay:.40s; }
-
 
 /* ── BOOK EXTRA PICS ── */
 .book-extra-pics {
@@ -987,22 +936,22 @@ footer {
 .conf-hero img { width: 100%; height: 100%; object-fit: cover; }
 .conf-hero:hover .conf-hero-ph { opacity: .7; }
 
-/* ── NEWS GRID — 3 different shapes ── */
+/* ── NEWS GRID ── */
 .news-grid {
   display: grid;
   grid-template-columns: 1fr 1.8fr 1fr;
   grid-template-rows: auto;
   gap: 2px; align-items: start;
 }
-.news-portrait { aspect-ratio: 3/4; }   /* English — tall */
-.news-landscape { aspect-ratio: 4/3; grid-row: span 1; align-self: center; } /* Hindi — wide */
-.news-square { aspect-ratio: 1/1; }     /* Telugu — square */
+.news-portrait { aspect-ratio: 3/4; }
+.news-landscape { aspect-ratio: 4/3; grid-row: span 1; align-self: center; }
+.news-square { aspect-ratio: 1/1; }
 
-/* ── FAN CARDS (Lando-style) ── */
+/* ── FAN CARDS ── */
 .fan-stage {
   position: relative; height: 520px;
   display: flex; align-items: center; justify-content: center;
-  overflow: visible;
+  overflow: hidden; /* KEY FIX: clip overflow on desktop too */
 }
 .fan-cards {
   position: relative; width: 260px; height: 420px;
@@ -1120,6 +1069,9 @@ footer {
 
 /* ── RESPONSIVE MOBILE (max 640px) ── */
 @media(max-width:640px) {
+  /* ── GLOBAL OVERFLOW FIX ── */
+  html, body { overflow-x: hidden; max-width: 100vw; }
+
   /* Nav */
   nav { padding: 16px 20px; }
   nav.stuck { padding: 12px 20px; }
@@ -1128,9 +1080,15 @@ footer {
   .nav-icon { width: 30px; height: 30px; }
   .nav-cta { padding: 10px 14px; font-size: 10px; letter-spacing: .06em; }
 
-  /* Hero */
-  #hero { padding: 0 20px 52px; }
-  .hero-bg-text { font-size: clamp(72px, 26vw, 120px); }
+  /* Hero — key fix: clip bg text, no horizontal overflow */
+  #hero { padding: 0 20px 52px; overflow: hidden; }
+  .hero-bg-text {
+    font-size: clamp(72px, 24vw, 110px);
+    /* Keep it centered but make sure it doesn't cause scroll */
+    left: 50%;
+    max-width: 100vw;
+    overflow: hidden;
+  }
   .hero-name { font-size: clamp(34px, 10vw, 52px); margin-bottom: 24px; max-width: 100%; }
   .hero-bottom { flex-direction: column; align-items: flex-start; gap: 24px; }
   .hero-cta-group { flex-direction: column; width: 100%; gap: 10px; }
@@ -1197,17 +1155,58 @@ footer {
   .testi-text { font-size: 15px; line-height: 1.55; }
   .tq { font-size: 52px; }
 
-  /* Gallery fan cards - mobile */
-  .fan-stage { height: 320px; }
-  .fan-cards { width: 130px; height: 220px; }
-  .fan-card { width: 120px; height: 210px; border-radius: 10px; }
-  .fan-card[data-index="0"] { --tx: -190px; --rot: -18deg; }
-  .fan-card[data-index="1"] { --tx: -100px; --rot: -10deg; }
-  .fan-card[data-index="2"] { --tx: 0px; --rot: 0deg; }
-  .fan-card[data-index="3"] { --tx: 100px; --rot: 10deg; }
-  .fan-card[data-index="4"] { --tx: 190px; --rot: 18deg; }
-  .fan-card[data-index="5"] { --tx: 270px; --rot: 26deg; }
-  .fan-card-label { font-size: 7px; padding: 12px 8px 6px; letter-spacing: .1em; }
+  /* ── FAN CARDS — MOBILE FIX ── */
+  /* Swipeable horizontal scroll instead of fanned layout */
+  #gallery { overflow: hidden; }
+
+  .fan-stage {
+    height: auto;
+    overflow: hidden;
+    display: block;
+    position: relative;
+  }
+
+  /* Hide the fanned card layout entirely on mobile */
+  .fan-cards {
+    display: none;
+  }
+
+  /* Mobile: show as horizontal scroll strip */
+  .fan-scroll-mobile {
+    display: flex !important;
+    gap: 12px;
+    overflow-x: auto;
+    padding: 12px 20px 20px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+  }
+  .fan-scroll-mobile::-webkit-scrollbar { display: none; }
+
+  .fan-scroll-mobile .fan-card-mob {
+    flex-shrink: 0;
+    width: 200px;
+    height: 300px;
+    border-radius: 14px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    scroll-snap-align: start;
+    box-shadow: 0 6px 24px rgba(15,14,12,.15);
+  }
+
+  .fan-scroll-mobile .fan-card-mob img {
+    width: 100%; height: 100%;
+    object-fit: cover; display: block;
+  }
+
+  .fan-scroll-mobile .fan-card-mob .fan-card-label {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: linear-gradient(to top, rgba(15,14,12,.75) 0%, transparent 100%);
+    color: var(--white); font-size: 10px; letter-spacing: .18em;
+    text-transform: uppercase; padding: 20px 14px 10px;
+    font-family: 'Syne', sans-serif;
+  }
 
   /* Lightbox */
   .fan-lb-inner { width: 96%; }
@@ -1228,6 +1227,9 @@ footer {
   .ft-brand-desc { font-size: 12px; }
   .footer-bottom { flex-direction: column; gap: 6px; text-align: center; }
 }
+
+/* Desktop: hide mobile scroll strip */
+.fan-scroll-mobile { display: none; }
 </style>
 </head>
 <body>
@@ -1303,7 +1305,6 @@ footer {
       <p class="about-body rv d3">A BSc in Business Management from the University of London brought structure to intuition. Returning to India, he became CMO at <strong>Panna Jewellers Exclusive</strong> — where he's rebuilding a 180-year legacy for the next 180 years.</p>
       <p class="about-body rv d3">But Devansh doesn't sit still. He's an author. An investor. Someone who completed <strong>Ironman 70.3 at 18</strong>, cycled from Manali to Leh, Kashmir to Kanyakumari, trekked to Annapurna and Everest Base Camp. The same discipline that gets you up a mountain gets your brand to the top.</p>
 
-      <!-- Achievements in a proper grid layout -->
       <div class="about-feats rv d4">
         <div class="about-feats-label">Milestones</div>
         <div class="feat-grid rv-stagger">
@@ -1333,7 +1334,7 @@ footer {
   </div>
 </section>
 
-<!-- BOOK (after About) -->
+<!-- BOOK -->
 <section id="book" class="s-pad dark-section" style="background:var(--ink)">
   <p class="s-label rv">The Book</p>
   <div class="book-grid">
@@ -1356,7 +1357,6 @@ footer {
       </div>
     </div>
   </div>
-  <!-- 2 extra photo slots alongside book -->
   <div class="book-extra-pics rv d3">
     <div class="book-extra-ph" style="padding:0;overflow:hidden;">
       <img onerror="this.onerror=function(){this.onerror=null;this.src='images/book 3.png'};" src="images/book 3.jpg" alt="" style="width:100%;height:100%;object-fit:cover;">
@@ -1367,7 +1367,7 @@ footer {
   </div>
 </section>
 
-<!-- CONSULTATION (Book a Session — after Book) -->
+<!-- CONSULTATION -->
 <section id="consultation" class="s-pad" style="background:var(--white)">
   <p class="s-label rv">Book a session</p>
   <div class="consult-heading-row rv d1">
@@ -1378,10 +1378,7 @@ footer {
     <div class="consult-hint rv d3">Hover any card to see what's included →</div>
   </div>
 
-  <!-- Three options side by side -->
   <div class="consult-options rv-stagger">
-
-    <!-- 1. Free Discovery Call -->
     <div class="co-card">
       <span class="co-badge free">Free</span>
       <div class="co-title">Discovery Call</div>
@@ -1390,7 +1387,6 @@ footer {
       <div class="co-price-note">FREE — for prospective buying customers only</div>
       <div class="co-divider"></div>
       <div style="font-size:12px;color:var(--stone);line-height:1.6;">A quick call to see if Devansh is the right person for your situation. No sales pressure. No wasted time.</div>
-
       <div class="co-reveal">
         <div class="co-reveal-head">What you get</div>
         <div class="co-reveal-price-big">Free</div>
@@ -1404,7 +1400,6 @@ footer {
       </div>
     </div>
 
-    <!-- 2. Online Consultation -->
     <div class="co-card">
       <span class="co-badge online">Online</span>
       <div class="co-title">Jewellery & Business Consultation</div>
@@ -1413,7 +1408,6 @@ footer {
       <div class="co-price-note">Online · 1 hour session</div>
       <div class="co-divider"></div>
       <div style="font-size:12px;color:var(--stone);line-height:1.6;">Everything from buying guidance to brand positioning — covered in one focused session.</div>
-
       <div class="co-reveal">
         <div class="co-reveal-head">What's covered</div>
         <div class="co-reveal-price-big">₹25,000</div>
@@ -1438,7 +1432,6 @@ footer {
       </div>
     </div>
 
-    <!-- 3. Offline Consultation -->
     <div class="co-card">
       <span class="co-badge offline">In-Person</span>
       <div class="co-title">Offline Strategy Session</div>
@@ -1447,7 +1440,6 @@ footer {
       <div class="co-price-note">Offline · 1 hour · In-person</div>
       <div class="co-divider"></div>
       <div style="font-size:12px;color:var(--stone);line-height:1.6;">Sit across the table. Deep-dive into your business, brand, or buying decision. Walk out with a plan.</div>
-
       <div class="co-reveal">
         <div class="co-reveal-head">What's covered</div>
         <div class="co-reveal-price-big">₹50,000</div>
@@ -1471,10 +1463,8 @@ footer {
         </div>
       </div>
     </div>
-
   </div>
 
-  <!-- Booking form -->
   <div class="consult-form-section rv d4">
     <div class="form-inner-grid">
       <div>
@@ -1520,7 +1510,7 @@ footer {
   </div>
 </section>
 
-<!-- WHAT I DO (after Book a Session form) -->
+<!-- WHAT I DO -->
 <section id="what" class="s-pad">
   <p class="s-label rv">What I do</p>
   <h2 class="s-head rv d1">Where you need me,<br>I <em>show up.</em></h2>
@@ -1566,14 +1556,13 @@ footer {
   </div>
 </section>
 
-<!-- PRESS / NEWSPAPER -->
+<!-- PRESS -->
 <section id="press" class="s-pad dark-section" style="background:var(--ink-soft)">
   <div class="press-bg-word">PRESS</div>
   <div style="position:relative;z-index:1">
     <p class="s-label rv">Press &amp; Conferences</p>
     <h2 class="s-head light rv d1">When the room<br>takes <em>notice.</em></h2>
 
-    <!-- 1 Conference image — full width hero -->
     <div class="conf-hero rv d2">
       <img onerror="this.onerror=function(){this.onerror=null;this.src='images/conference 3.png'};" src="images/conference 3.jpg" alt="" style="width:100%;height:100%;object-fit:cover;display:block;">
       <div class="press-overlay">
@@ -1583,34 +1572,30 @@ footer {
       </div>
     </div>
 
-    <!-- 3 newspapers in different shapes/orientations -->
     <div style="margin-top:48px">
       <p style="font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:28px;display:flex;align-items:center;gap:14px;">
         <span style="width:20px;height:1px;background:rgba(255,255,255,.3);display:inline-block;flex-shrink:0;"></span>
         In The Press
       </p>
       <div class="news-grid rv-stagger">
-        <!-- English — portrait tall -->
         <div class="press-card news-portrait">
-          <img onerror="this.onerror=function(){this.onerror=null;this.src='images/english newspaper.png'};" src="images/english newspaper.jpg" onerror="this.src='images/english newspaper.jpeg';this.onerror=null;" alt="" style="width:100%;height:100%;object-fit:cover;display:block;">
+          <img onerror="this.onerror=function(){this.onerror=null;this.src='images/english newspaper.png'};" src="images/english newspaper.jpg" alt="" style="width:100%;height:100%;object-fit:cover;display:block;">
           <div class="press-overlay">
             <div class="press-tag">English · Newspaper Feature</div>
             <div class="press-title">Featured in English Press</div>
             <div class="press-date">2025</div>
           </div>
         </div>
-        <!-- Hindi — landscape wide -->
         <div class="press-card news-landscape">
-          <img onerror="this.onerror=function(){this.onerror=null;this.src='images/hindi newspaper.png'};" src="images/hindi newspaper.jpg" onerror="this.src='images/hindi newspaper.jpeg';this.onerror=null;" alt="" style="width:100%;height:100%;object-fit:cover;display:block;">
+          <img onerror="this.onerror=function(){this.onerror=null;this.src='images/hindi newspaper.png'};" src="images/hindi newspaper.jpg" alt="" style="width:100%;height:100%;object-fit:cover;display:block;">
           <div class="press-overlay">
             <div class="press-tag">Hindi · Newspaper Feature</div>
             <div class="press-title">हिंदी प्रेस में फ़ीचर</div>
             <div class="press-date">2025</div>
           </div>
         </div>
-        <!-- Telugu — square -->
         <div class="press-card news-square">
-          <img onerror="this.onerror=function(){this.onerror=null;this.src='images/telegu.png'};" src="images/telegu.jpg" onerror="this.src='images/telegu newspaper.jpg';this.onerror=function(){this.onerror=null;this.src='images/telegu newspaper.jpg'};" alt="" style="width:100%;height:100%;object-fit:cover;display:block;">
+          <img onerror="this.onerror=function(){this.onerror=null;this.src='images/telegu.png'};" src="images/telegu.jpg" alt="" style="width:100%;height:100%;object-fit:cover;display:block;">
           <div class="press-overlay">
             <div class="press-tag">Telugu · Newspaper Feature</div>
             <div class="press-title">తెలుగు పత్రికలో ఫీచర్</div>
@@ -1639,7 +1624,7 @@ footer {
   </div>
 </section>
 
-<!-- GALLERY: Life Beyond Work — fanned social cards (Lando Norris style) -->
+<!-- GALLERY: Life Beyond Work -->
 <section id="gallery" class="s-pad" style="background:var(--off-white)">
   <p class="s-label rv">Life beyond work</p>
   <div class="rv d1" style="text-align:center;margin-bottom:8px">
@@ -1647,37 +1632,65 @@ footer {
   </div>
   <p class="rv d2" style="text-align:center;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--stone);margin-bottom:64px">Click any card to expand</p>
 
-  <!-- Fanned cards container -->
+  <!-- DESKTOP: Fanned cards -->
   <div class="fan-stage rv d3">
     <div class="fan-cards">
-      <div class="fan-card" data-index="0" style="--rot:-18deg;--tx:-340px;--z:1">
+      <div class="fan-card" data-index="0" data-label="Mellow" style="--rot:-18deg;--tx:-340px;--z:1">
         <img onerror="this.onerror=function(){this.onerror=null;this.src='images/social 1.png'};" src="images/social 1.jpg" alt="" class="fan-card-img">
         <div class="fan-card-label">Mellow</div>
       </div>
-      <div class="fan-card" data-index="1" style="--rot:-10deg;--tx:-180px;--z:2">
+      <div class="fan-card" data-index="1" data-label="The Cycle Route" style="--rot:-10deg;--tx:-180px;--z:2">
         <img onerror="this.onerror=function(){this.onerror=null;this.src='images/social 2.png'};" src="images/social 2.jpg" alt="" class="fan-card-img">
         <div class="fan-card-label">The Cycle Route</div>
       </div>
-      <div class="fan-card active" data-index="2" style="--rot:0deg;--tx:0px;--z:6">
+      <div class="fan-card active" data-index="2" data-label="Ironman 70.3" style="--rot:0deg;--tx:0px;--z:6">
         <img onerror="this.onerror=function(){this.onerror=null;this.src='images/marathon 1.png'};" src="images/marathon 1.jpg" alt="" class="fan-card-img">
         <div class="fan-card-label">Ironman 70.3</div>
       </div>
-      <div class="fan-card" data-index="3" style="--rot:10deg;--tx:180px;--z:2">
+      <div class="fan-card" data-index="3" data-label="The Trek" style="--rot:10deg;--tx:180px;--z:2">
         <img onerror="this.onerror=function(){this.onerror=null;this.src='images/trek 1.png'};" src="images/trek 1.jpg" alt="" class="fan-card-img">
         <div class="fan-card-label">The Trek</div>
       </div>
-      <div class="fan-card" data-index="4" style="--rot:18deg;--tx:340px;--z:1">
+      <div class="fan-card" data-index="4" data-label="Life" style="--rot:18deg;--tx:340px;--z:1">
         <img onerror="this.onerror=function(){this.onerror=null;this.src='images/social 5.png'};" src="images/social 5.jpg" alt="" class="fan-card-img">
         <div class="fan-card-label">Life</div>
       </div>
-      <div class="fan-card" data-index="5" style="--rot:26deg;--tx:490px;--z:0">
+      <div class="fan-card" data-index="5" data-label="Adventures" style="--rot:26deg;--tx:490px;--z:0">
         <img onerror="this.onerror=function(){this.onerror=null;this.src='images/social 7.png'};" src="images/social 7.jpg" alt="" class="fan-card-img">
+        <div class="fan-card-label">Adventures</div>
+      </div>
+    </div>
+
+    <!-- MOBILE: Horizontal scroll strip (shown via CSS on mobile) -->
+    <div class="fan-scroll-mobile">
+      <div class="fan-card-mob" data-label="Mellow">
+        <img onerror="this.onerror=function(){this.onerror=null;this.src='images/social 1.png'};" src="images/social 1.jpg" alt="">
+        <div class="fan-card-label">Mellow</div>
+      </div>
+      <div class="fan-card-mob" data-label="The Cycle Route">
+        <img onerror="this.onerror=function(){this.onerror=null;this.src='images/social 2.png'};" src="images/social 2.jpg" alt="">
+        <div class="fan-card-label">The Cycle Route</div>
+      </div>
+      <div class="fan-card-mob" data-label="Ironman 70.3">
+        <img onerror="this.onerror=function(){this.onerror=null;this.src='images/marathon 1.png'};" src="images/marathon 1.jpg" alt="">
+        <div class="fan-card-label">Ironman 70.3</div>
+      </div>
+      <div class="fan-card-mob" data-label="The Trek">
+        <img onerror="this.onerror=function(){this.onerror=null;this.src='images/trek 1.png'};" src="images/trek 1.jpg" alt="">
+        <div class="fan-card-label">The Trek</div>
+      </div>
+      <div class="fan-card-mob" data-label="Life">
+        <img onerror="this.onerror=function(){this.onerror=null;this.src='images/social 5.png'};" src="images/social 5.jpg" alt="">
+        <div class="fan-card-label">Life</div>
+      </div>
+      <div class="fan-card-mob" data-label="Adventures">
+        <img onerror="this.onerror=function(){this.onerror=null;this.src='images/social 7.png'};" src="images/social 7.jpg" alt="">
         <div class="fan-card-label">Adventures</div>
       </div>
     </div>
   </div>
 
-  <!-- Lightbox overlay -->
+  <!-- Lightbox -->
   <div class="fan-lightbox" id="fanLightbox">
     <div class="fan-lb-inner">
       <button class="fan-lb-close" id="fanLbClose">&times;</button>
@@ -1718,27 +1731,19 @@ footer {
       <p class="contact-sub rv d1">Whether it's a business challenge, a jewellery decision, a speaking inquiry, or you just want to say hello — the inbox is open.</p>
       <div class="rv d2">
         <a href="https://www.instagram.com/devanshalijar/" class="contact-link">
-          <div class="cl-icon">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
-          </div>
+          <div class="cl-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></div>
           @devanshalijar on Instagram
         </a>
         <a href="https://www.youtube.com/@DevanshAlijar" class="contact-link">
-          <div class="cl-icon">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M22 8s-.3-2-1.2-2.8c-1.1-1.2-2.4-1.2-3-1.3C15.6 3.8 12 3.8 12 3.8s-3.6 0-5.8.1c-.6.1-1.9.1-3 1.3C2.3 6 2 8 2 8S1.8 10.2 1.8 12.4v2.1C1.8 16.7 2 18.8 2 18.8s.3 2 1.2 2.8c1.1 1.2 2.6 1.1 3.3 1.2C8.8 23 12 23 12 23s3.6 0 5.8-.2c.6-.1 1.9-.1 3-1.3.9-.8 1.2-2.8 1.2-2.8S22 16.7 22 14.5v-2.1C22 10.2 22 8 22 8zM9.8 15.1V8.7l6.4 3.2-6.4 3.2z"/></svg>
-          </div>
+          <div class="cl-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M22 8s-.3-2-1.2-2.8c-1.1-1.2-2.4-1.2-3-1.3C15.6 3.8 12 3.8 12 3.8s-3.6 0-5.8.1c-.6.1-1.9.1-3 1.3C2.3 6 2 8 2 8S1.8 10.2 1.8 12.4v2.1C1.8 16.7 2 18.8 2 18.8s.3 2 1.2 2.8c1.1 1.2 2.6 1.1 3.3 1.2C8.8 23 12 23 12 23s3.6 0 5.8-.2c.6-.1 1.9-.1 3-1.3.9-.8 1.2-2.8 1.2-2.8S22 16.7 22 14.5v-2.1C22 10.2 22 8 22 8zM9.8 15.1V8.7l6.4 3.2-6.4 3.2z"/></svg></div>
           @DevanshAlijar on YouTube
         </a>
         <a href="https://www.linkedin.com/in/devansh-alijar-94258a132/" class="contact-link">
-          <div class="cl-icon">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
-          </div>
+          <div class="cl-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg></div>
           LinkedIn
         </a>
         <a href="https://www.threads.com/@devanshalijar" class="contact-link">
-          <div class="cl-icon">
-            <svg width="15" height="15" viewBox="0 0 192 192" fill="currentColor"><path d="M141.537 88.988a66.667 66.667 0 00-2.518-1.143c-1.482-27.307-16.403-42.94-41.457-43.1h-.34c-14.986 0-27.449 6.396-35.12 18.05l13.337 9.21c5.83-8.776 15.03-10.65 21.783-10.65h.232c8.424.055 14.787 2.5 18.917 7.273 3.002 3.498 5.005 8.353 5.988 14.512a97.42 97.42 0 00-24.11-1.242c-24.257 1.4-39.88 15.673-38.877 35.478.508 10.007 5.705 18.636 14.642 24.288 7.538 4.817 17.26 7.16 27.375 6.607 13.313-.723 23.77-5.798 31.088-15.097 5.582-7.098 9.103-16.292 10.64-27.763 6.327 3.82 11.013 8.86 13.562 14.963 4.356 10.422 4.617 27.553-9.008 41.179-11.907 11.907-26.24 17.072-47.92 17.225-24.026-.169-42.199-7.886-54.012-22.95C35.775 136.01 29.888 117.51 29.67 95.5c.218-22.01 6.105-40.51 17.495-55.03C59.128 25.41 77.3 17.692 101.326 17.524c24.197.169 42.603 7.93 54.743 23.078 6.004 7.489 10.533 16.996 13.498 28.18l15.745-4.237c-3.606-13.459-9.312-25.033-17.081-34.459C152.95 10.927 130.564 1.24 101.44 1.024h-.36C72.096 1.24 49.467 10.98 33.627 29.817 19.218 46.982 11.809 70.816 11.54 95.494v.011c.27 24.678 7.678 48.512 22.087 65.677 15.84 18.836 38.469 28.577 67.494 28.792h.36c25.862-.185 44.061-6.86 59.026-21.826 20.513-20.515 19.893-46.232 13.144-62.012-4.73-11.317-13.58-20.448-25.773-26.448l-.342.3z"/></svg>
-          </div>
+          <div class="cl-icon"><svg width="15" height="15" viewBox="0 0 192 192" fill="currentColor"><path d="M141.537 88.988a66.667 66.667 0 00-2.518-1.143c-1.482-27.307-16.403-42.94-41.457-43.1h-.34c-14.986 0-27.449 6.396-35.12 18.05l13.337 9.21c5.83-8.776 15.03-10.65 21.783-10.65h.232c8.424.055 14.787 2.5 18.917 7.273 3.002 3.498 5.005 8.353 5.988 14.512a97.42 97.42 0 00-24.11-1.242c-24.257 1.4-39.88 15.673-38.877 35.478.508 10.007 5.705 18.636 14.642 24.288 7.538 4.817 17.26 7.16 27.375 6.607 13.313-.723 23.77-5.798 31.088-15.097 5.582-7.098 9.103-16.292 10.64-27.763 6.327 3.82 11.013 8.86 13.562 14.963 4.356 10.422 4.617 27.553-9.008 41.179-11.907 11.907-26.24 17.072-47.92 17.225-24.026-.169-42.199-7.886-54.012-22.95C35.775 136.01 29.888 117.51 29.67 95.5c.218-22.01 6.105-40.51 17.495-55.03C59.128 25.41 77.3 17.692 101.326 17.524c24.197.169 42.603 7.93 54.743 23.078 6.004 7.489 10.533 16.996 13.498 28.18l15.745-4.237c-3.606-13.459-9.312-25.033-17.081-34.459C152.95 10.927 130.564 1.24 101.44 1.024h-.36C72.096 1.24 49.467 10.98 33.627 29.817 19.218 46.982 11.809 70.816 11.54 95.494v.011c.27 24.678 7.678 48.512 22.087 65.677 15.84 18.836 38.469 28.577 67.494 28.792h.36c25.862-.185 44.061-6.86 59.026-21.826 20.513-20.515 19.893-46.232 13.144-62.012-4.73-11.317-13.58-20.448-25.773-26.448l-.342.3z"/></svg></div>
           @devanshalijar on Threads
         </a>
       </div>
@@ -1801,14 +1806,11 @@ footer {
 const nav = document.getElementById('nav');
 window.addEventListener('scroll', () => nav.classList.toggle('stuck', scrollY > 60));
 
-// ── REVEAL (all types)
+// ── REVEAL
 const allRv = document.querySelectorAll('.rv, .rv-left, .rv-scale, .rv-stagger');
 const observer = new IntersectionObserver(entries => {
   entries.forEach(e => {
-    if(e.isIntersecting) {
-      e.target.classList.add('on');
-      observer.unobserve(e.target);
-    }
+    if(e.isIntersecting) { e.target.classList.add('on'); observer.unobserve(e.target); }
   });
 }, { threshold: .08, rootMargin: '0px 0px -40px 0px' });
 allRv.forEach(el => observer.observe(el));
@@ -1835,58 +1837,52 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   });
 });
 
-
-// ── FAN CARDS
-const fanCards = document.querySelectorAll('.fan-card');
+// ── LIGHTBOX HELPER
 const lightbox = document.getElementById('fanLightbox');
 const lbImg = document.getElementById('fanLbImg');
 const lbLabel = document.getElementById('fanLbLabel');
 const lbClose = document.getElementById('fanLbClose');
 
-fanCards.forEach(card => {
+function openLightbox(imgSrc, label) {
+  lbImg.innerHTML = '';
+  if (imgSrc) {
+    const clone = document.createElement('img');
+    clone.src = imgSrc;
+    clone.style.cssText = 'width:auto;height:auto;max-width:100%;max-height:82vh;object-fit:contain;display:block;border-radius:12px;box-shadow:0 24px 80px rgba(0,0,0,.5);';
+    lbImg.appendChild(clone);
+  }
+  lbLabel.textContent = label;
+  lightbox.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+// ── DESKTOP FAN CARDS
+document.querySelectorAll('.fan-card').forEach(card => {
   card.addEventListener('click', () => {
     const label = card.querySelector('.fan-card-label').textContent;
     const imgEl = card.querySelector('img');
-    if (imgEl) {
-      lbImg.innerHTML = '';
-      const clone = document.createElement('img');
-      clone.src = imgEl.src;
-      clone.style.width = '100%';
-      clone.style.height = 'auto';
-      clone.style.maxHeight = '85vh';
-      clone.style.objectFit = 'contain';
-      clone.style.display = 'block';
-      clone.style.borderRadius = '12px';
-      lbImg.appendChild(clone);
-    } else {
-      const ph = card.querySelector('.fan-ph');
-      lbImg.innerHTML = ph ? ph.innerHTML : '📸';
-    }
-    lbLabel.textContent = label;
-    lightbox.classList.add('open');
-    document.body.style.overflow = 'hidden';
+    openLightbox(imgEl ? imgEl.src : null, label);
   });
 });
 
-if (lbClose) {
-  lbClose.addEventListener('click', () => {
-    lightbox.classList.remove('open');
-    document.body.style.overflow = '';
+// ── MOBILE SCROLL CARDS
+document.querySelectorAll('.fan-card-mob').forEach(card => {
+  card.addEventListener('click', () => {
+    const label = card.dataset.label;
+    const imgEl = card.querySelector('img');
+    openLightbox(imgEl ? imgEl.src : null, label);
   });
-}
-if (lightbox) {
-  lightbox.addEventListener('click', (e) => {
-    if (e.target === lightbox) {
-      lightbox.classList.remove('open');
-      document.body.style.overflow = '';
-    }
-  });
-}
+});
 
-// ── HERO PARALLAX
+if (lbClose) lbClose.addEventListener('click', () => { lightbox.classList.remove('open'); document.body.style.overflow = ''; });
+if (lightbox) lightbox.addEventListener('click', e => { if(e.target === lightbox){ lightbox.classList.remove('open'); document.body.style.overflow = ''; } });
+
+// ── HERO PARALLAX (desktop only)
 window.addEventListener('scroll', () => {
-  const bg = document.querySelector('.hero-bg-text');
-  if(bg) bg.style.transform = `translate(-50%,calc(-50% + ${scrollY * .15}px)) scale(${1 + scrollY * .0003})`;
+  if (window.innerWidth > 640) {
+    const bg = document.querySelector('.hero-bg-text');
+    if(bg) bg.style.transform = `translate(-50%,calc(-50% + ${scrollY * .15}px)) scale(${1 + scrollY * .0003})`;
+  }
 });
 </script>
 </body>
