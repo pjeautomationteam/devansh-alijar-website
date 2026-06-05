@@ -322,7 +322,7 @@ nav.stuck {
 /* ── CONSULTATION SECTION ── */
 #consultation { background: var(--white); }
 .consult-heading-row {
-  display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 72px;
+  display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 56px;
 }
 .consult-intro-text {
   font-size: 17px; font-weight: 300; color: var(--stone);
@@ -331,106 +331,404 @@ nav.stuck {
 .consult-intro-text strong { color: var(--ink); font-weight: 500; }
 .consult-hint {
   font-size: 11px; letter-spacing: .2em; text-transform: uppercase;
-  color: var(--stone-light); text-align: right; max-width: 160px;
+  color: var(--stone-light); text-align: right; max-width: 180px;
 }
 
-.consult-options {
-  display: grid; grid-template-columns: repeat(2, 1fr);
-  gap: 2px; margin-bottom: 80px;
+/* ── DEVANSH PROFILE BAR ── */
+.devansh-bar {
+  display: flex; align-items: center; gap: 28px;
+  background: var(--off-white); border: 1px solid var(--border);
+  padding: 24px 36px; margin-bottom: 40px; flex-wrap: wrap;
 }
-.co-card {
-  background: var(--off-white);
-  padding: 48px 40px;
-  position: relative; overflow: hidden;
-  border: 1px solid var(--border);
-  transition: border-color .4s;
-  cursor: pointer;
+.devansh-photo-wrap { position: relative; flex-shrink: 0; width: 66px; height: 66px; }
+.devansh-photo-wrap img {
+  width: 66px; height: 66px; border-radius: 50%;
+  object-fit: cover; object-position: top center;
+  border: 2px solid var(--white);
+  box-shadow: 0 4px 16px rgba(15,14,12,.12);
+  transition: transform .5s cubic-bezier(.16,1,.3,1), box-shadow .5s;
+  display: block;
 }
-.co-card:hover { border-color: var(--ink); }
-.co-card::after {
-  content:''; position:absolute; bottom:0; left:0; right:0; height:3px;
-  background: var(--ink); transform: scaleX(0); transform-origin: left;
-  transition: transform .5s cubic-bezier(.16,1,.3,1);
+.devansh-photo-wrap:hover img {
+  transform: scale(1.08) translateY(-3px);
+  box-shadow: 0 14px 36px rgba(15,14,12,.2);
 }
-.co-card:hover::after { transform: scaleX(1); }
-.co-badge {
-  display: inline-block;
-  font-size: 9px; letter-spacing: .22em; text-transform: uppercase;
-  padding: 5px 12px; margin-bottom: 28px;
-  font-family: 'Syne', sans-serif;
+.devansh-avail-ring {
+  position: absolute; bottom: 1px; right: 1px;
+  width: 13px; height: 13px; border-radius: 50%;
+  background: var(--sage); border: 2px solid var(--off-white);
+  animation: breathe 2.4s ease-in-out infinite;
 }
-.co-badge.online { background: var(--accent-pale); color: var(--accent); }
-.co-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 22px; font-weight: 500; color: var(--ink);
-  line-height: 1.2; margin-bottom: 10px;
-}
-.co-subtitle {
-  font-size: 13px; color: var(--stone); margin-bottom: 28px;
-  font-weight: 300; line-height: 1.6;
-}
-.co-price {
-  font-family: 'Playfair Display', serif;
-  font-size: 34px; color: var(--ink); line-height: 1;
-  margin-bottom: 6px;
-}
-.co-price-note {
-  font-size: 11px; color: var(--stone); letter-spacing: .06em;
-  margin-bottom: 32px;
-}
-.co-divider { height: 1px; background: var(--border); margin: 28px 0; }
+@keyframes breathe { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.25);opacity:.65} }
 
-.co-reveal {
-  position: absolute; inset: 0;
+.devansh-id { flex: 1; min-width: 180px; }
+.devansh-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 19px; font-weight: 500; color: var(--ink);
+  margin-bottom: 4px; line-height: 1;
+}
+.devansh-role {
+  font-size: 12px; font-weight: 300; color: var(--stone); letter-spacing: .02em;
+}
+.devansh-avail-now {
+  font-size: 10px; letter-spacing: .14em; text-transform: uppercase;
+  font-family: 'Syne', sans-serif; font-weight: 700; color: var(--sage);
+  display: inline-flex; align-items: center; gap: 6px; margin-top: 8px;
+}
+.devansh-avail-now::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--sage); animation: breathe 2.4s ease-in-out infinite;
+}
+
+/* Stat blocks — clickable */
+.devansh-stats { display: flex; gap: 0; flex-shrink: 0; }
+.dstat {
+  text-align: center; padding: 0 24px;
+  border-left: 1px solid var(--border);
+  cursor: default;
+}
+.dstat:first-child { border-left: none; }
+.dstat.clickable { cursor: pointer; transition: transform .2s; }
+.dstat.clickable:hover { transform: translateY(-2px); }
+.dstat-n {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px; font-weight: 500; color: var(--ink); line-height: 1;
+}
+.dstat.clickable:hover .dstat-n { color: var(--accent); }
+.dstat-l {
+  font-size: 9px; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--stone); font-family: 'Syne', sans-serif; margin-top: 6px;
+}
+.dstat-hint {
+  font-size: 8px; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--accent); margin-top: 3px; opacity: 0; transition: opacity .2s;
+}
+.dstat.clickable:hover .dstat-hint { opacity: 1; }
+
+/* Stats breakdown panel */
+.stats-breakdown {
   background: var(--ink); color: var(--white);
-  padding: 40px;
-  opacity: 0; transform: translateY(12px);
-  transition: opacity .4s cubic-bezier(.16,1,.3,1), transform .4s cubic-bezier(.16,1,.3,1);
-  pointer-events: none;
-  display: flex; flex-direction: column; justify-content: flex-start;
-  overflow-y: auto;
+  margin-bottom: 40px; overflow: hidden;
+  max-height: 0; opacity: 0;
+  transition: max-height .5s cubic-bezier(.16,1,.3,1), opacity .4s, margin-bottom .4s;
 }
-.co-card:hover .co-reveal {
-  opacity: 1; transform: translateY(0);
-  pointer-events: auto;
+.stats-breakdown.open { max-height: 320px; opacity: 1; }
+.stats-breakdown-inner { padding: 32px 40px; }
+.sb-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  margin-bottom: 24px; flex-wrap: wrap; gap: 8px;
 }
-.co-reveal-head {
-  font-family: 'Syne', sans-serif;
-  font-size: 11px; letter-spacing: .22em; text-transform: uppercase;
-  color: rgba(255,255,255,.4); margin-bottom: 20px;
+.sb-title {
+  font-family: 'Playfair Display', serif; font-size: 20px; color: var(--white);
 }
-.co-reveal-price-big {
-  font-family: 'Playfair Display', serif;
-  font-size: 40px; color: var(--white); line-height: 1; margin-bottom: 4px;
+.sb-title em { font-style: italic; color: rgba(255,255,255,.5); }
+.sb-close {
+  background: none; border: none; color: rgba(255,255,255,.5); cursor: pointer;
+  font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+  font-family: 'Syne', sans-serif; transition: color .2s;
 }
-.co-reveal-price-note {
-  font-size: 12px; color: rgba(255,255,255,.4); margin-bottom: 28px;
-  font-style: italic;
+.sb-close:hover { color: var(--white); }
+.sb-bars { display: flex; flex-direction: column; gap: 16px; }
+.sb-row { display: flex; align-items: center; gap: 16px; }
+.sb-row-label {
+  font-size: 12px; color: rgba(255,255,255,.7); width: 130px; flex-shrink: 0;
+  font-family: 'Syne', sans-serif; letter-spacing: .04em;
 }
-.co-reveal-list {
-  list-style: none; display: flex; flex-direction: column; gap: 10px;
+.sb-row-track {
+  flex: 1; height: 8px; background: rgba(255,255,255,.08); position: relative; overflow: hidden;
 }
-.co-reveal-list li {
-  font-size: 13px; color: rgba(255,255,255,.75);
-  line-height: 1.5; padding-left: 16px; position: relative;
+.sb-row-fill {
+  position: absolute; left: 0; top: 0; bottom: 0; width: 0;
+  background: linear-gradient(90deg, var(--accent), var(--accent-light));
+  transition: width 1s cubic-bezier(.16,1,.3,1);
 }
-.co-reveal-list li::before {
-  content: '→'; position: absolute; left: 0;
-  color: rgba(255,255,255,.35); font-size: 11px;
+.sb-row-val {
+  font-family: 'Playfair Display', serif; font-size: 16px; color: var(--white);
+  width: 80px; text-align: right; flex-shrink: 0;
 }
 
-.consult-form-section {
-  background: var(--off-white); padding: 64px;
-  margin-top: 2px;
+/* ── SESSION CARDS ── */
+.session-list { display: flex; flex-direction: column; gap: 2px; }
+.sc {
+  display: grid; grid-template-columns: 80px 1fr auto;
+  align-items: center; gap: 0;
+  background: var(--off-white); border: 1px solid var(--border);
+  cursor: pointer; position: relative; overflow: hidden;
+  transition: border-color .35s, transform .35s, box-shadow .35s;
 }
-.c-form-title {
+.sc:hover { border-color: var(--ink-soft); transform: translateY(-2px); box-shadow: 0 10px 30px rgba(15,14,12,.07); }
+.sc::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  background: var(--ink); transform: scaleY(0); transform-origin: bottom;
+  transition: transform .4s cubic-bezier(.16,1,.3,1);
+}
+.sc:hover::before { transform: scaleY(1); }
+.sc-dur {
+  align-self: stretch; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  background: var(--white); border-right: 1px solid var(--border);
+  padding: 28px 0; transition: background .35s;
+}
+.sc:hover .sc-dur { background: var(--ink); }
+.sc-dur-n {
   font-family: 'Playfair Display', serif;
-  font-size: 30px; color: var(--ink); margin-bottom: 8px;
+  font-size: 26px; font-weight: 500; color: var(--ink); line-height: 1; transition: color .35s;
 }
-.c-form-sub {
-  font-size: 14px; font-weight: 300; color: var(--stone);
-  margin-bottom: 40px; line-height: 1.7;
+.sc:hover .sc-dur-n { color: var(--white); }
+.sc-dur-u {
+  font-size: 9px; letter-spacing: .2em; text-transform: uppercase;
+  font-family: 'Syne', sans-serif; color: var(--stone); margin-top: 3px; transition: color .35s;
 }
+.sc:hover .sc-dur-u { color: rgba(255,255,255,.5); }
+.sc-info { padding: 28px 36px; }
+.sc-tag {
+  font-size: 9px; letter-spacing: .22em; text-transform: uppercase;
+  font-family: 'Syne', sans-serif; color: var(--stone); margin-bottom: 6px;
+}
+.sc-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 19px; font-weight: 500; color: var(--ink); line-height: 1.2; margin-bottom: 6px;
+}
+.sc-desc { font-size: 13px; font-weight: 300; color: var(--stone); line-height: 1.65; max-width: 480px; }
+.sc-right {
+  padding: 28px 36px 28px 20px; text-align: right; align-self: stretch;
+  display: flex; flex-direction: column; align-items: flex-end; justify-content: center;
+}
+.sc-price { font-family: 'Playfair Display', serif; font-size: 28px; color: var(--ink); line-height: 1; margin-bottom: 4px; }
+.sc-pnote { font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: var(--stone-light); margin-bottom: 18px; }
+.sc-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--ink); color: var(--white); border: none; padding: 11px 22px;
+  font-family: 'Syne', sans-serif; font-size: 10px;
+  font-weight: 700; letter-spacing: .18em; text-transform: uppercase;
+  cursor: pointer; transition: background .3s; white-space: nowrap;
+}
+.sc-btn:hover { background: var(--ink-soft); }
+.sc-btn svg { transition: transform .25s; }
+.sc:hover .sc-btn svg { transform: translateX(3px); }
+
+/* ════════ BOOKING MODAL (popup) ════════ */
+.bm-overlay {
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(15,14,12,0.6); backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center; padding: 24px;
+  opacity: 0; pointer-events: none;
+  transition: opacity .4s cubic-bezier(.16,1,.3,1);
+}
+.bm-overlay.open { opacity: 1; pointer-events: all; }
+.bm-box {
+  background: var(--white); width: 100%; max-width: 560px;
+  max-height: 90vh; overflow: hidden; position: relative;
+  display: flex; flex-direction: column;
+  transform: translateY(30px) scale(.97);
+  transition: transform .45s cubic-bezier(.16,1,.3,1);
+  box-shadow: 0 40px 100px rgba(0,0,0,.4);
+}
+.bm-overlay.open .bm-box { transform: translateY(0) scale(1); }
+
+/* Header */
+.bm-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 22px 32px; border-bottom: 1px solid var(--border); flex-shrink: 0;
+}
+.bm-session { display: flex; align-items: center; gap: 14px; }
+.bm-badge {
+  font-size: 9px; letter-spacing: .2em; text-transform: uppercase;
+  font-family: 'Syne', sans-serif; padding: 5px 11px; background: var(--ink); color: var(--white);
+}
+.bm-name { font-family: 'Playfair Display', serif; font-size: 17px; color: var(--ink); }
+.bm-price { font-family: 'Playfair Display', serif; font-size: 17px; color: var(--stone); }
+.bm-close {
+  background: none; border: none; cursor: pointer; color: var(--stone);
+  width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+  border-radius: 50%; transition: background .2s, color .2s; flex-shrink: 0;
+}
+.bm-close:hover { background: var(--mist); color: var(--ink); }
+
+/* Steps */
+.bm-steps {
+  display: flex; align-items: center; padding: 16px 32px;
+  border-bottom: 1px solid var(--border); background: var(--off-white); flex-shrink: 0;
+}
+.bm-step { display: flex; align-items: center; gap: 8px; }
+.bm-step-n {
+  width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--border-strong);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 600; font-family: 'Syne', sans-serif;
+  color: var(--stone-light); flex-shrink: 0; transition: all .3s;
+}
+.bm-step-n.active { background: var(--ink); color: var(--white); border-color: var(--ink); }
+.bm-step-n.done { background: var(--sage); color: var(--white); border-color: var(--sage); }
+.bm-step-l {
+  font-size: 10px; letter-spacing: .14em; text-transform: uppercase;
+  font-family: 'Syne', sans-serif; color: var(--stone-light); transition: color .3s;
+}
+.bm-step.active .bm-step-l { color: var(--ink); }
+.bm-step.done .bm-step-l { color: var(--sage); }
+.bm-step-line { flex: 1; height: 1px; background: var(--border); margin: 0 10px; }
+
+/* Body + slides */
+.bm-body { flex: 1; overflow-y: auto; position: relative; }
+.bm-body::-webkit-scrollbar { width: 4px; }
+.bm-body::-webkit-scrollbar-thumb { background: var(--mist-dark); }
+.bm-slide {
+  padding: 28px 32px; position: absolute; top: 0; left: 0; right: 0;
+  opacity: 0; transform: translateX(40px); pointer-events: none;
+  transition: opacity .4s cubic-bezier(.16,1,.3,1), transform .4s cubic-bezier(.16,1,.3,1);
+}
+.bm-slide.active { position: relative; opacity: 1; transform: translateX(0); pointer-events: all; }
+
+/* ── CALENDAR ── */
+.cal-head {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;
+}
+.cal-month {
+  font-family: 'Playfair Display', serif; font-size: 18px; color: var(--ink);
+}
+.cal-nav { display: flex; gap: 6px; }
+.cal-nav-btn {
+  width: 32px; height: 32px; border: 1px solid var(--border-strong);
+  background: var(--white); cursor: pointer; color: var(--ink);
+  display: flex; align-items: center; justify-content: center; transition: all .2s;
+}
+.cal-nav-btn:hover:not(:disabled) { background: var(--ink); color: var(--white); border-color: var(--ink); }
+.cal-nav-btn:disabled { opacity: .3; cursor: not-allowed; }
+.cal-dow {
+  display: grid; grid-template-columns: repeat(7,1fr); gap: 2px; margin-bottom: 6px;
+}
+.cal-dow span {
+  text-align: center; font-size: 9px; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--stone-light); font-family: 'Syne', sans-serif; font-weight: 600; padding: 6px 0;
+}
+.cal-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 2px; }
+.cal-cell {
+  aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
+  font-size: 14px; position: relative; border: 1px solid transparent;
+}
+.cal-cell.empty { pointer-events: none; }
+.cal-cell.unavail { color: var(--stone-light); opacity: .35; }
+.cal-cell.avail {
+  cursor: pointer; color: var(--ink); background: var(--off-white);
+  border-color: var(--border); transition: all .2s; font-weight: 500;
+}
+.cal-cell.avail::after {
+  content: ''; position: absolute; bottom: 5px; left: 50%; transform: translateX(-50%);
+  width: 4px; height: 4px; border-radius: 50%; background: var(--sage);
+}
+.cal-cell.avail:hover { background: var(--mist); border-color: var(--ink-soft); }
+.cal-cell.sel { background: var(--ink); color: var(--white); border-color: var(--ink); }
+.cal-cell.sel::after { background: var(--white); }
+.cal-legend {
+  display: flex; align-items: center; gap: 8px; margin-top: 18px;
+  font-size: 11px; color: var(--stone);
+}
+.cal-legend-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--sage); }
+
+/* Slots */
+.bm-slabel {
+  font-size: 10px; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--stone); margin-bottom: 16px; font-family: 'Syne', sans-serif;
+}
+.bm-slots { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+.bm-slot {
+  background: var(--off-white); border: 1px solid var(--border-strong);
+  padding: 13px 8px; text-align: center; cursor: pointer;
+  font-size: 14px; color: var(--ink); font-weight: 300; transition: all .2s;
+}
+.bm-slot:hover { border-color: var(--ink); background: var(--white); }
+.bm-slot.sel { background: var(--ink); color: var(--white); border-color: var(--ink); }
+
+/* Detail form */
+.bm-summary {
+  background: var(--off-white); border: 1px solid var(--border);
+  padding: 14px 18px; margin-bottom: 22px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.bm-sum-row { display: flex; justify-content: space-between; font-size: 13px; }
+.bm-sum-l { color: var(--stone); }
+.bm-sum-v { color: var(--ink); font-weight: 500; }
+.bm-form { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.bm-fg { display: flex; flex-direction: column; gap: 7px; }
+.bm-fg.span2 { grid-column: span 2; }
+.bm-lbl { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--stone); font-family: 'Syne', sans-serif; }
+.bm-input {
+  background: var(--off-white); border: 1px solid var(--border-strong);
+  color: var(--ink); padding: 12px 14px;
+  font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 300;
+  outline: none; transition: border-color .3s; -webkit-appearance: none; width: 100%;
+}
+.bm-input:focus { border-color: var(--ink); background: var(--white); }
+textarea.bm-input { resize: vertical; min-height: 76px; }
+
+/* Footer */
+.bm-footer {
+  padding: 18px 32px; border-top: 1px solid var(--border); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: space-between; gap: 14px;
+}
+.bm-back {
+  background: none; border: 1px solid var(--border-strong); color: var(--stone);
+  padding: 12px 24px; font-family: 'Syne', sans-serif; font-size: 11px;
+  font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
+  cursor: pointer; transition: all .25s;
+}
+.bm-back:hover { border-color: var(--ink); color: var(--ink); }
+.bm-next {
+  background: var(--ink); color: var(--white); border: none; padding: 14px 36px;
+  font-family: 'Syne', sans-serif; font-size: 12px;
+  font-weight: 700; letter-spacing: .16em; text-transform: uppercase;
+  cursor: pointer; transition: background .3s; display: flex; align-items: center; gap: 10px;
+}
+.bm-next:hover { background: var(--ink-soft); }
+.bm-next:disabled { opacity: .4; cursor: not-allowed; }
+.bm-foot-note { font-size: 11px; color: var(--stone-light); }
+
+/* Success */
+.bm-success { text-align: center; padding: 44px 20px; }
+.bm-success-check {
+  width: 58px; height: 58px; margin: 0 auto 20px; background: var(--sage);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  animation: popCheck .5s cubic-bezier(.16,1.4,.3,1) forwards;
+}
+@keyframes popCheck { from{transform:scale(0)} to{transform:scale(1)} }
+.bm-success-title { font-family: 'Playfair Display', serif; font-size: 28px; color: var(--ink); margin-bottom: 10px; }
+.bm-success-sub { font-size: 14px; font-weight: 300; color: var(--stone); max-width: 380px; margin: 0 auto 28px; line-height: 1.75; }
+.bm-success-detail {
+  border: 1px solid var(--border); background: var(--off-white);
+  text-align: left; margin-bottom: 28px;
+}
+.bm-sd-row { display: flex; justify-content: space-between; gap: 24px; padding: 12px 20px; border-bottom: 1px solid var(--border); font-size: 13px; }
+.bm-sd-row:last-child { border-bottom: none; }
+.bm-sd-l { color: var(--stone); }
+.bm-sd-v { color: var(--ink); font-weight: 500; }
+
+/* Legacy form fields (used in contact section still) */
+.fg { margin-bottom: 18px; }
+.fg label {
+  display: block; font-size: 10px; letter-spacing: .22em;
+  text-transform: uppercase; color: var(--stone); margin-bottom: 10px;
+}
+.fg input, .fg textarea, .fg select {
+  width: 100%; background: var(--white);
+  border: 1px solid var(--border-strong);
+  color: var(--ink); padding: 14px 18px;
+  font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 300;
+  outline: none; transition: border-color .3s; -webkit-appearance: none;
+}
+.fg select option { background: var(--white); }
+.fg input:focus, .fg textarea:focus, .fg select:focus { border-color: var(--ink); }
+.fg textarea { resize: vertical; min-height: 110px; }
+.fr { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.form-inner-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+.btn-ink {
+  width: 100%; background: var(--ink); color: var(--white);
+  border: none; padding: 18px;
+  font-family: 'Syne', sans-serif; font-size: 12px;
+  font-weight: 700; letter-spacing: .18em; text-transform: uppercase;
+  cursor: pointer; transition: background .3s; margin-top: 8px;
+}
+.btn-ink:hover { background: var(--ink-soft); }
+
+/* Legacy form fields (used in contact section still) */
 .fg { margin-bottom: 18px; }
 .fg label {
   display: block; font-size: 10px; letter-spacing: .22em;
@@ -1130,12 +1428,31 @@ footer {
   /* Consultation */
   .consult-heading-row { flex-direction: column; align-items: flex-start; gap: 12px; margin-bottom: 32px; }
   .consult-hint { display: none; }
-  .consult-options { grid-template-columns: 1fr; gap: 10px; margin-bottom: 32px; }
-  .co-card { padding: 28px 20px; }
-  .co-price { font-size: 28px; }
-  .consult-form-section { padding: 28px 20px; }
-  .form-inner-grid { grid-template-columns: 1fr; gap: 20px; }
-  .fr { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .devansh-bar { flex-direction: column; align-items: flex-start; gap: 20px; padding: 24px 20px; }
+  .devansh-stats { width: 100%; justify-content: space-between; }
+  .dstat { padding: 0 12px; flex: 1; }
+  .dstat:first-child { padding-left: 0; }
+  .dstat-n { font-size: 24px; }
+  .stats-breakdown-inner { padding: 24px 20px; }
+  .sb-row-label { width: 92px; font-size: 11px; }
+  .sb-row-val { width: 50px; font-size: 14px; }
+  .sc { grid-template-columns: 60px 1fr; }
+  .sc-right { display: none; }
+  .sc-info { padding: 20px; }
+  .sc-title { font-size: 16px; }
+  .sc-desc { font-size: 12px; }
+  .bm-overlay { padding: 0; align-items: flex-end; }
+  .bm-box { max-width: 100%; max-height: 94vh; }
+  .bm-overlay.open .bm-box { transform: translateY(0); }
+  .bm-header { padding: 16px 20px; }
+  .bm-session { flex-wrap: wrap; gap: 8px; }
+  .bm-steps { padding: 14px 20px; }
+  .bm-slide { padding: 22px 20px; }
+  .bm-slots { grid-template-columns: repeat(3,1fr); }
+  .bm-form { grid-template-columns: 1fr; }
+  .bm-fg.span2 { grid-column: span 1; }
+  .bm-footer { padding: 14px 20px; }
+  .bm-next { padding: 14px 24px; }
 
   /* What I Do */
   .what-grid { grid-template-columns: 1fr; border: none; }
@@ -1381,98 +1698,200 @@ footer {
       <h2 class="s-head">One conversation can<br>change <em>everything.</em></h2>
       <p class="consult-intro-text rv d2">Whether you're about to spend ₹10 lakh on jewellery or you're a founder who can't crack why your brand isn't connecting — <strong>Devansh has been in both rooms.</strong></p>
     </div>
-    <div class="consult-hint rv d3">Hover any card to see what's included →</div>
+    <div class="consult-hint rv d3">Select a session to book &amp; pay →</div>
   </div>
 
-  <!-- CHANGE 1: Only 2 cards, no FREE badge on first, no topics list -->
-  <div class="consult-options rv-stagger">
-
-    <div class="co-card" onclick="document.querySelector('.consult-form-section').scrollIntoView({behavior:'smooth'})">
-      <div class="co-title">Discovery Call</div>
-      <div class="co-subtitle">15 minutes · No agenda, no pitch.<br>Just an honest first conversation.</div>
-      <div class="co-price-note" style="margin-bottom:32px;">For prospective customers only</div>
-      <div class="co-divider"></div>
-      <div style="font-size:12px;color:var(--stone);line-height:1.6;">A quick call to see if Devansh is the right person for your situation. No sales pressure. No wasted time.</div>
-      <div class="co-reveal">
-        <div class="co-reveal-head">What you get</div>
-        <div class="co-reveal-price-big" style="font-size:28px;">Complimentary</div>
-        <div class="co-reveal-price-note">Available only for prospective customers</div>
-        <ul class="co-reveal-list">
-  <li>Direct 15-min call with Devansh</li>
-  <li>Quick clarity — are we a fit?</li>
-  <li>First honest answer, on the house</li>
-  <li>No pitch. No agenda. Just conversation.</li>
-  <li>Custom engagement ring planning & design guidance</li>
-  <li>Personalised jewellery plan based on your budget & occasion</li>
-  <li>Bespoke order process walkthrough — from concept to creation</li>
-  <li>Guidance on gold, diamond & gemstone selection</li>
-</ul>
+  <!-- DEVANSH PROFILE BAR -->
+  <div class="devansh-bar rv d2">
+    <div class="devansh-photo-wrap">
+      <img src="images/professional%201.JPG" alt="Devansh Alijar">
+      <div class="devansh-avail-ring"></div>
+    </div>
+    <div class="devansh-id">
+      <div class="devansh-name">Devansh Alijar</div>
+      <div class="devansh-role">CMO, Panna Jewellers · Author · Third-generation jeweller</div>
+      <div class="devansh-avail-now">Available this week</div>
+    </div>
+    <div class="devansh-stats">
+      <div class="dstat clickable" id="statTotal" onclick="toggleBreakdown()">
+        <div class="dstat-n" data-count="0" id="statTotalN">0</div>
+        <div class="dstat-l">Sessions Booked</div>
+        <div class="dstat-hint">Tap for breakdown</div>
+      </div>
+      <div class="dstat">
+        <div class="dstat-n" data-count="60000" data-suffix="k+" data-divide="1000">0</div>
+        <div class="dstat-l">People Helped</div>
+      </div>
+      <div class="dstat">
+        <div class="dstat-n" data-count="1000" data-suffix="+">0</div>
+        <div class="dstat-l">Books Sold</div>
       </div>
     </div>
-
-    <div class="co-card" onclick="document.querySelector('.consult-form-section').scrollIntoView({behavior:'smooth'})">
-      <span class="co-badge online">Online</span>
-      <div class="co-title">Jewellery & Business Consultation</div>
-      <div class="co-subtitle">1 hour online session to solve real problems — jewellery, brand, or business.</div>
-      <div class="co-price">₹25,000</div>
-      <div class="co-price-note">Online · 1 hour session</div>
-      <div class="co-divider"></div>
-      <div style="font-size:12px;color:var(--stone);line-height:1.6;">Everything from buying guidance to brand positioning — covered in one focused session.</div>
-      <div class="co-reveal">
-        <div class="co-reveal-head">What's covered</div>
-        <div class="co-reveal-price-big">₹25,000</div>
-        <div class="co-reveal-price-note">Online · 1 hour · Video call</div>
-        <ul class="co-reveal-list">
-          <li>Jewellery buying guidance before big purchases</li>
-          <li>Brand strategy &amp; positioning</li>
-          <li>Digital transformation roadmap</li>
-          <li>Revenue &amp; growth advisory</li>
-          <li>Content &amp; authority building</li>
-        </ul>
-      </div>
-    </div>
-
   </div>
 
-  <div class="consult-form-section rv d4">
-    <div class="form-inner-grid">
-      <div>
-        <div class="c-form-title">Start the conversation.</div>
-        <p class="c-form-sub">Tell Devansh what's going on. Whether it's jewellery, brand, or business — he'll give you an honest answer.</p>
-        <div style="margin-top:32px">
-          <div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--stone);margin-bottom:16px;">Pricing at a glance</div>
-          <div style="display:flex;flex-direction:column;gap:12px;">
-            <div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border);font-size:14px;">
-              <span style="color:var(--stone)">Discovery Call</span>
-              <span style="font-family:'Playfair Display',serif;color:var(--ink)">Complimentary</span>
-            </div>
-            <div style="display:flex;justify-content:space-between;padding:12px 0;font-size:14px;">
-              <span style="color:var(--stone)">Online Consultation</span>
-              <span style="font-family:'Playfair Display',serif;color:var(--ink)">₹25,000</span>
-            </div>
-          </div>
-        </div>
+  <!-- STATS BREAKDOWN PANEL -->
+  <div class="stats-breakdown" id="statsBreakdown">
+    <div class="stats-breakdown-inner">
+      <div class="sb-head">
+        <div class="sb-title">How people <em>spend their time with Devansh.</em></div>
+        <button class="sb-close" onclick="toggleBreakdown()">Close ✕</button>
       </div>
-      <div>
-        <div class="fr">
-          <div class="fg"><label>First Name</label><input type="text" placeholder="Arjun" id="c-fname"></div>
-          <div class="fg"><label>Last Name</label><input type="text" placeholder="Sharma" id="c-lname"></div>
-        </div>
-        <div class="fg"><label>Email</label><input type="email" placeholder="you@yourcompany.com" id="c-email"></div>
-        <div class="fg"><label>Phone</label><input type="tel" placeholder="+91 98765 43210" id="c-phone"></div>
-        <div class="fg">
-          <label>Session Type</label>
-          <select id="c-session">
-            <option>Free Discovery Call (buying customers)</option>
-            <option>Online Consultation — ₹25,000</option>
-          </select>
-        </div>
-        <div class="fg"><label>What's going on?</label><textarea placeholder="Tell Devansh what you're trying to figure out..." id="c-msg"></textarea></div>
-        <button class="btn-ink" id="submitBtn">Send →</button>
+      <div class="sb-bars" id="sbBars">
+        <!-- filled by JS -->
       </div>
     </div>
+  </div>
+
+  <!-- SESSION CARDS -->
+  <div class="session-list rv d3">
+
+    <div class="sc" onclick="openBooking('15-Minute Session','₹5,000',5000,'15min')">
+      <div class="sc-dur"><div class="sc-dur-n">15</div><div class="sc-dur-u">min</div></div>
+      <div class="sc-info">
+        <div class="sc-tag">Quick Clarity · Video Call</div>
+        <div class="sc-title">One question. One honest answer. That's it.</div>
+        <div class="sc-desc">You have a burning question about jewellery, brand, or business. You want a straight answer — not a 45-minute preamble before someone tells you to "think about it." Fifteen minutes of complete focus on your one thing.</div>
+      </div>
+      <div class="sc-right">
+        <div class="sc-price">₹5,000</div>
+        <div class="sc-pnote">Per session</div>
+        <button class="sc-btn">Book <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+      </div>
+    </div>
+
+    <div class="sc" onclick="openBooking('30-Minute Session','₹12,000',12000,'30min')">
+      <div class="sc-dur"><div class="sc-dur-n">30</div><div class="sc-dur-u">min</div></div>
+      <div class="sc-info">
+        <div class="sc-tag">Deep Dive · Video Call</div>
+        <div class="sc-title">Enough time to actually get somewhere.</div>
+        <div class="sc-desc">Half an hour to map the real problem, not just the surface one. We look at what's actually going on — a jewellery purchase, brand clarity, or business direction — and leave with a path that's concrete, not comfortable.</div>
+      </div>
+      <div class="sc-right">
+        <div class="sc-price">₹12,000</div>
+        <div class="sc-pnote">Per session</div>
+        <button class="sc-btn">Book <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+      </div>
+    </div>
+
+    <div class="sc" onclick="openBooking('45-Minute Session','₹15,000',15000,'45min')">
+      <div class="sc-dur"><div class="sc-dur-n">45</div><div class="sc-dur-u">min</div></div>
+      <div class="sc-info">
+        <div class="sc-tag">Strategy Session · Video Call</div>
+        <div class="sc-title">Diagnose. Discuss. Walk out with a plan.</div>
+        <div class="sc-desc">For the decisions that actually matter. We dig into your situation — a jewellery investment, brand positioning, or what's blocking your growth — and you leave with something you can act on the same day. Not a PDF. An actual plan.</div>
+      </div>
+      <div class="sc-right">
+        <div class="sc-price">₹15,000</div>
+        <div class="sc-pnote">Per session</div>
+        <button class="sc-btn">Book <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+      </div>
+    </div>
+
+    <div class="sc" onclick="openBooking('60-Minute Session','₹25,000',25000,'60min')">
+      <div class="sc-dur"><div class="sc-dur-n">60</div><div class="sc-dur-u">min</div></div>
+      <div class="sc-info">
+        <div class="sc-tag">Full Consultation · Video Call</div>
+        <div class="sc-title">Everything on the table. Nothing held back.</div>
+        <div class="sc-desc">The full session. Jewellery, brand, business — nothing is off limits, and nothing gets glossed over. The conversation where real decisions get made, with someone who has sat on both sides of the table.</div>
+      </div>
+      <div class="sc-right">
+        <div class="sc-price">₹25,000</div>
+        <div class="sc-pnote">Per session</div>
+        <button class="sc-btn">Book <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+      </div>
+    </div>
+
   </div>
 </section>
+
+<!-- ════════ BOOKING MODAL (popup) ════════ -->
+<div class="bm-overlay" id="bmOverlay">
+  <div class="bm-box">
+
+    <!-- Header -->
+    <div class="bm-header">
+      <div class="bm-session">
+        <span class="bm-badge" id="bmBadge">Session</span>
+        <span class="bm-name" id="bmName">—</span>
+        <span class="bm-price" id="bmPrice">—</span>
+      </div>
+      <button class="bm-close" onclick="closeBooking()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <!-- Steps -->
+    <div class="bm-steps">
+      <div class="bm-step active" id="bmStepEl1"><div class="bm-step-n active" id="bmStepN1">1</div><div class="bm-step-l">Date</div></div>
+      <div class="bm-step-line"></div>
+      <div class="bm-step" id="bmStepEl2"><div class="bm-step-n" id="bmStepN2">2</div><div class="bm-step-l">Time</div></div>
+      <div class="bm-step-line"></div>
+      <div class="bm-step" id="bmStepEl3"><div class="bm-step-n" id="bmStepN3">3</div><div class="bm-step-l">Details</div></div>
+    </div>
+
+    <!-- Body / slides -->
+    <div class="bm-body" id="bmBody">
+
+      <!-- Slide 1: Calendar -->
+      <div class="bm-slide active" id="bmSlide1">
+        <div class="cal-head">
+          <div class="cal-month" id="calMonth">Month</div>
+          <div class="cal-nav">
+            <button class="cal-nav-btn" id="calPrev" onclick="calShift(-1)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+            <button class="cal-nav-btn" id="calNext" onclick="calShift(1)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg></button>
+          </div>
+        </div>
+        <div class="cal-dow"><span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span></div>
+        <div class="cal-grid" id="calGrid"></div>
+        <div class="cal-legend"><span class="cal-legend-dot"></span> Available days — Devansh takes calls Wed, Thu, Fri, Sat &amp; Sun</div>
+      </div>
+
+      <!-- Slide 2: Time -->
+      <div class="bm-slide" id="bmSlide2">
+        <p class="bm-slabel" id="bmSlotsLabel">Available times</p>
+        <div class="bm-slots" id="bmSlotsGrid"></div>
+      </div>
+
+      <!-- Slide 3: Details -->
+      <div class="bm-slide" id="bmSlide3">
+        <div class="bm-summary">
+          <div class="bm-sum-row"><span class="bm-sum-l">Session</span><span class="bm-sum-v" id="bmSumSession">—</span></div>
+          <div class="bm-sum-row"><span class="bm-sum-l">When</span><span class="bm-sum-v" id="bmSumWhen">—</span></div>
+          <div class="bm-sum-row"><span class="bm-sum-l">Amount</span><span class="bm-sum-v" id="bmSumAmount">—</span></div>
+        </div>
+        <div class="bm-form">
+          <div class="bm-fg"><label class="bm-lbl">First Name</label><input class="bm-input" type="text" id="bmFname" placeholder="Arjun"></div>
+          <div class="bm-fg"><label class="bm-lbl">Last Name</label><input class="bm-input" type="text" id="bmLname" placeholder="Sharma"></div>
+          <div class="bm-fg"><label class="bm-lbl">Email</label><input class="bm-input" type="email" id="bmEmail" placeholder="you@company.com"></div>
+          <div class="bm-fg"><label class="bm-lbl">Phone</label><input class="bm-input" type="tel" id="bmPhone" placeholder="+91 98765 43210"></div>
+          <div class="bm-fg span2"><label class="bm-lbl">What would you like to cover? <span style="color:var(--stone-light);font-weight:300;">(optional)</span></label><textarea class="bm-input" id="bmTopic" placeholder="The more specific, the better..."></textarea></div>
+        </div>
+      </div>
+
+      <!-- Slide 4: Success -->
+      <div class="bm-slide" id="bmSlide4">
+        <div class="bm-success">
+          <div class="bm-success-check"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="bm-success-title">Booking confirmed.</div>
+          <p class="bm-success-sub">Payment received. A confirmation is on its way to your email. Devansh's team will send a calendar invite within 24 hours.</p>
+          <div class="bm-success-detail" id="bmSuccessDetail"></div>
+          <button class="bm-next" style="margin:0 auto;" onclick="closeBooking()">Done →</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="bm-footer" id="bmFooter">
+      <button class="bm-back" id="bmBackBtn" onclick="bmBack()" style="visibility:hidden;">← Back</button>
+      <div style="display:flex;align-items:center;gap:20px;">
+        <span class="bm-foot-note" id="bmFootNote">Secured by Razorpay</span>
+        <button class="bm-next" id="bmNextBtn" onclick="bmNext()" disabled>Continue →</button>
+      </div>
+    </div>
+
+  </div>
+</div>
 
 <!-- WHAT I DO -->
 <!-- CHANGE 3: Card 06 (Speaking & Masterclasses) removed -->
@@ -1783,9 +2202,7 @@ window.addEventListener('scroll', () => nav.classList.toggle('stuck', scrollY > 
 // ── REVEAL
 const allRv = document.querySelectorAll('.rv, .rv-left, .rv-scale, .rv-stagger');
 const observer = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if(e.isIntersecting) { e.target.classList.add('on'); observer.unobserve(e.target); }
-  });
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('on'); observer.unobserve(e.target); } });
 }, { threshold: .08, rootMargin: '0px 0px -40px 0px' });
 allRv.forEach(el => observer.observe(el));
 
@@ -1798,126 +2215,369 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
 });
 
 // ── JOIN TEAM MODAL
-const joinModal   = document.getElementById('joinModal');
-const joinModalClose = document.getElementById('joinModalClose');
-
-function openJoinForm() {
-  window.open('https://forms.gle/8X9YJQBckmFsfLGt9', '_blank');
-}
-
+function openJoinForm() { window.open('https://forms.gle/8X9YJQBckmFsfLGt9', '_blank'); }
 ['applyBtn','joinNavBtn','joinFooterBtn'].forEach(id => {
   const el = document.getElementById(id);
   if(el) el.addEventListener('click', openJoinForm);
 });
 
-// ── GOOGLE SHEETS INTEGRATION
+// ── GOOGLE SHEETS
 const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbxj0zsJBLbaPguhfW_vZb7E1uPuE1jq0XHL02Ser5ijVpEdsrRTDFbLcB_EvskoHUc/exec';
 
-// Consultation form → Sheet 1 (Lead's from devansh's Page)
-const submitBtn = document.getElementById('submitBtn');
-if(submitBtn) {
-  submitBtn.addEventListener('click', async () => {
-    const firstName   = document.getElementById('c-fname')?.value.trim() || '';
-    const lastName    = document.getElementById('c-lname')?.value.trim() || '';
-    const email       = document.getElementById('c-email')?.value.trim() || '';
-    const phone       = document.getElementById('c-phone')?.value.trim() || '';
-    const sessionType = document.getElementById('c-session')?.value || '';
-    const message     = document.getElementById('c-msg')?.value.trim() || '';
-
-    submitBtn.textContent = 'Sending...';
-    submitBtn.disabled = true;
-
-    try {
-      await fetch(SHEETS_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ formType: 'consultation', firstName, lastName, email, phone, sessionType, message })
-      });
-    } catch(e) {}
-
-    submitBtn.textContent = 'Sent ✓';
-    submitBtn.style.background = 'var(--sage)';
-    submitBtn.disabled = false;
-    setTimeout(() => { submitBtn.textContent = 'Send →'; submitBtn.style.background = ''; }, 3000);
-  });
-}
-
-// Contact form → Sheet 2 (Contact's from devansh's space)
+// Contact form
 const submitBtn2 = document.getElementById('submitBtn2');
-if(submitBtn2) {
+if(submitBtn2){
   submitBtn2.addEventListener('click', async () => {
-    const name    = document.getElementById('ct-name')?.value.trim() || '';
-    const email   = document.getElementById('ct-email')?.value.trim() || '';
-    const subject = document.getElementById('ct-subject')?.value.trim() || '';
-    const message = document.getElementById('ct-msg')?.value.trim() || '';
+    const name=document.getElementById('ct-name')?.value.trim()||'';
+    const email=document.getElementById('ct-email')?.value.trim()||'';
+    const subject=document.getElementById('ct-subject')?.value.trim()||'';
+    const message=document.getElementById('ct-msg')?.value.trim()||'';
+    submitBtn2.textContent='Sending...'; submitBtn2.disabled=true;
+    try{ await fetch(SHEETS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({formType:'contact',name,email,subject,message})}); }catch(e){}
+    submitBtn2.textContent='Sent ✓'; submitBtn2.style.background='var(--sage)'; submitBtn2.disabled=false;
+    setTimeout(()=>{ submitBtn2.textContent='Send Message →'; submitBtn2.style.background=''; },3000);
+  });
+}
 
-    submitBtn2.textContent = 'Sending...';
-    submitBtn2.disabled = true;
+// ── LIGHTBOX
+const lightbox=document.getElementById('fanLightbox');
+const lbImg=document.getElementById('fanLbImg');
+const lbLabel=document.getElementById('fanLbLabel');
+const lbClose=document.getElementById('fanLbClose');
+function openLightbox(src,label){
+  lbImg.innerHTML='';
+  if(src){ const c=document.createElement('img'); c.src=src; c.style.cssText='width:auto;height:auto;max-width:100%;max-height:82vh;object-fit:contain;display:block;border-radius:12px;box-shadow:0 24px 80px rgba(0,0,0,.5);'; lbImg.appendChild(c); }
+  lbLabel.textContent=label; lightbox.classList.add('open'); document.body.style.overflow='hidden';
+}
+document.querySelectorAll('.fan-card').forEach(card=>{
+  card.addEventListener('click',()=>{ openLightbox(card.querySelector('img')?.src, card.querySelector('.fan-card-label').textContent); });
+});
+document.querySelectorAll('.fan-card-mob').forEach(card=>{
+  card.addEventListener('click',()=>{ openLightbox(card.querySelector('img')?.src, card.dataset.label); });
+});
+if(lbClose) lbClose.addEventListener('click',()=>{ lightbox.classList.remove('open'); document.body.style.overflow=''; });
+if(lightbox) lightbox.addEventListener('click',e=>{ if(e.target===lightbox){ lightbox.classList.remove('open'); document.body.style.overflow=''; } });
 
-    try {
-      await fetch(SHEETS_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ formType: 'contact', name, email, subject, message })
+// ── HERO PARALLAX
+window.addEventListener('scroll',()=>{
+  if(window.innerWidth>640){ const bg=document.querySelector('.hero-bg-text'); if(bg) bg.style.transform=`translate(-50%,calc(-50% + ${scrollY*.15}px)) scale(${1+scrollY*.0003})`; }
+});
+
+// ═══════════════════════════════════════════════════════════════
+// BOOKING FLOW
+// ═══════════════════════════════════════════════════════════════
+
+const RAZORPAY_LINKS = {
+  '15min': 'https://rzp.io/rzp/jZPdrwd',
+  '30min': 'https://rzp.io/rzp/ITirWkt4',
+  '45min': 'https://rzp.io/rzp/piyceVY',
+  '60min': 'https://rzp.io/rzp/HHTljyAj'
+};
+
+// Availability: dayOfWeek → [[startH, endH], ...]
+const SCHEDULE = {
+  0: [[12,17]],         // Sun
+  3: [[10,20]],         // Wed
+  4: [[12,17]],         // Thu
+  5: [[4,10],[15,20]],  // Fri
+  6: [[10,18]]          // Sat
+};
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const DAYS   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+let bmState = { session:null, day:null, slot:null, step:1 };
+let calView = new Date(); // currently shown month
+
+function getSlotsForDay(date){
+  const ranges=SCHEDULE[date.getDay()]; if(!ranges) return [];
+  const slots=[]; const now=new Date();
+  ranges.forEach(([sh,eh])=>{ for(let h=sh;h<eh;h++){ const sd=new Date(date); sd.setHours(h,0,0,0); if(sd>now) slots.push(formatHour(h)); } });
+  return slots;
+}
+function isAvailable(date){
+  const t=new Date(); t.setHours(0,0,0,0);
+  if(date < t) return false;
+  return SCHEDULE[date.getDay()] && getSlotsForDay(date).length > 0;
+}
+function formatHour(h){ const p=h>=12?'PM':'AM'; const d=h>12?h-12:(h===0?12:h); return `${d}:00 ${p}`; }
+function fmtDate(d){ return DAYS[d.getDay()]+', '+d.getDate()+' '+MONTHS[d.getMonth()]+' '+d.getFullYear(); }
+const MONTHS_FULL = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+// ── Open / close modal
+function openBooking(name, price, amount, key){
+  bmState = { session:{name,price,amount,key}, day:null, slot:null, step:1 };
+  document.getElementById('bmBadge').textContent = name;
+  document.getElementById('bmName').textContent  = name;
+  document.getElementById('bmPrice').textContent = price;
+
+  calView = new Date(); calView.setDate(1);
+  renderCalendar();
+  // reset to step 1 instantly
+  [1,2,3,4].forEach(n=>document.getElementById('bmSlide'+n).classList.remove('active'));
+  document.getElementById('bmSlide1').classList.add('active');
+  bmState.step=1; updateSteps(); updateFooter();
+
+  document.getElementById('bmOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeBooking(){
+  document.getElementById('bmOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+document.getElementById('bmOverlay').addEventListener('click', e=>{ if(e.target.id==='bmOverlay') closeBooking(); });
+
+// ── Calendar
+function renderCalendar(){
+  document.getElementById('calMonth').textContent = MONTHS_FULL[calView.getMonth()]+' '+calView.getFullYear();
+  const grid=document.getElementById('calGrid'); grid.innerHTML='';
+
+  const year=calView.getFullYear(), month=calView.getMonth();
+  const firstDow=new Date(year,month,1).getDay();
+  const daysInMonth=new Date(year,month+1,0).getDate();
+
+  for(let i=0;i<firstDow;i++){ const c=document.createElement('div'); c.className='cal-cell empty'; grid.appendChild(c); }
+
+  for(let d=1;d<=daysInMonth;d++){
+    const date=new Date(year,month,d);
+    const c=document.createElement('div'); c.textContent=d;
+    if(isAvailable(date)){
+      c.className='cal-cell avail';
+      if(bmState.day && bmState.day.toDateString()===date.toDateString()) c.classList.add('sel');
+      c.addEventListener('click',()=>{
+        document.querySelectorAll('.cal-cell').forEach(x=>x.classList.remove('sel'));
+        c.classList.add('sel');
+        bmState.day=date; bmState.slot=null;
+        document.getElementById('bmNextBtn').disabled=false;
       });
-    } catch(e) {}
+    } else {
+      c.className='cal-cell unavail';
+    }
+    grid.appendChild(c);
+  }
 
-    submitBtn2.textContent = 'Sent ✓';
-    submitBtn2.style.background = 'var(--sage)';
-    submitBtn2.disabled = false;
-    setTimeout(() => { submitBtn2.textContent = 'Send Message →'; submitBtn2.style.background = ''; }, 3000);
+  // prev disabled if viewing current month
+  const now=new Date();
+  document.getElementById('calPrev').disabled = (year===now.getFullYear() && month<=now.getMonth());
+}
+function calShift(dir){
+  calView.setMonth(calView.getMonth()+dir);
+  renderCalendar();
+}
+
+// ── Slots
+function renderSlots(){
+  const grid=document.getElementById('bmSlotsGrid');
+  document.getElementById('bmSlotsLabel').textContent='Available times · '+fmtDate(bmState.day);
+  grid.innerHTML='';
+  getSlotsForDay(bmState.day).forEach(s=>{
+    const el=document.createElement('div'); el.className='bm-slot'; el.textContent=s;
+    el.addEventListener('click',()=>{
+      document.querySelectorAll('.bm-slot').forEach(b=>b.classList.remove('sel'));
+      el.classList.add('sel'); bmState.slot=s;
+      document.getElementById('bmNextBtn').disabled=false;
+    });
+    grid.appendChild(el);
   });
 }
 
-// ── LIGHTBOX HELPER
-const lightbox = document.getElementById('fanLightbox');
-const lbImg = document.getElementById('fanLbImg');
-const lbLabel = document.getElementById('fanLbLabel');
-const lbClose = document.getElementById('fanLbClose');
-
-function openLightbox(imgSrc, label) {
-  lbImg.innerHTML = '';
-  if (imgSrc) {
-    const clone = document.createElement('img');
-    clone.src = imgSrc;
-    clone.style.cssText = 'width:auto;height:auto;max-width:100%;max-height:82vh;object-fit:contain;display:block;border-radius:12px;box-shadow:0 24px 80px rgba(0,0,0,.5);';
-    lbImg.appendChild(clone);
+// ── Step indicators + footer
+function updateSteps(){
+  [1,2,3].forEach(n=>{
+    const el=document.getElementById('bmStepEl'+n), num=document.getElementById('bmStepN'+n);
+    el.classList.remove('active','done'); num.classList.remove('active','done');
+    if(n<bmState.step){ el.classList.add('done'); num.classList.add('done'); num.textContent='✓'; }
+    else if(n===bmState.step){ el.classList.add('active'); num.classList.add('active'); num.textContent=n; }
+    else { num.textContent=n; }
+  });
+}
+function updateFooter(){
+  const next=document.getElementById('bmNextBtn'), back=document.getElementById('bmBackBtn');
+  const note=document.getElementById('bmFootNote'), footer=document.getElementById('bmFooter');
+  if(bmState.step===4){ footer.style.display='none'; return; }
+  footer.style.display='flex';
+  if(bmState.step===1){ next.textContent='Continue →'; next.disabled=!bmState.day; back.style.visibility='hidden'; note.textContent='All times shown in IST'; }
+  else if(bmState.step===2){ next.textContent='Continue →'; next.disabled=!bmState.slot; back.style.visibility='visible'; note.textContent='All times shown in IST'; }
+  else if(bmState.step===3){
+    next.textContent='Proceed to Payment →'; next.disabled=false; back.style.visibility='visible';
+    note.textContent='Secured by Razorpay';
+    document.getElementById('bmSumSession').textContent=bmState.session.name;
+    document.getElementById('bmSumWhen').textContent=fmtDate(bmState.day)+' · '+bmState.slot+' IST';
+    document.getElementById('bmSumAmount').textContent=bmState.session.price;
   }
-  lbLabel.textContent = label;
-  lightbox.classList.add('open');
-  document.body.style.overflow = 'hidden';
 }
 
-// ── DESKTOP FAN CARDS
-document.querySelectorAll('.fan-card').forEach(card => {
-  card.addEventListener('click', () => {
-    const label = card.querySelector('.fan-card-label').textContent;
-    const imgEl = card.querySelector('img');
-    openLightbox(imgEl ? imgEl.src : null, label);
-  });
-});
-
-// ── MOBILE SCROLL CARDS
-document.querySelectorAll('.fan-card-mob').forEach(card => {
-  card.addEventListener('click', () => {
-    const label = card.dataset.label;
-    const imgEl = card.querySelector('img');
-    openLightbox(imgEl ? imgEl.src : null, label);
-  });
-});
-
-if (lbClose) lbClose.addEventListener('click', () => { lightbox.classList.remove('open'); document.body.style.overflow = ''; });
-if (lightbox) lightbox.addEventListener('click', e => { if(e.target === lightbox){ lightbox.classList.remove('open'); document.body.style.overflow = ''; } });
-
-// ── HERO PARALLAX (desktop only)
-window.addEventListener('scroll', () => {
-  if (window.innerWidth > 640) {
-    const bg = document.querySelector('.hero-bg-text');
-    if(bg) bg.style.transform = `translate(-50%,calc(-50% + ${scrollY * .15}px)) scale(${1 + scrollY * .0003})`;
+// ── Slide transition
+function goSlide(step, fwd){
+  const prev=document.getElementById('bmSlide'+bmState.step);
+  const next=document.getElementById('bmSlide'+step);
+  bmState.step=step;
+  if(prev!==next){
+    prev.style.transform=fwd?'translateX(-36px)':'translateX(36px)'; prev.style.opacity='0'; prev.style.pointerEvents='none';
+    next.style.transition='none'; next.style.position='absolute'; next.style.top='0'; next.style.left='0'; next.style.right='0';
+    next.style.transform=fwd?'translateX(36px)':'translateX(-36px)'; next.style.opacity='0'; next.classList.add('active');
+    next.getBoundingClientRect();
+    next.style.transition=''; next.style.transform='translateX(0)'; next.style.opacity='1'; next.style.pointerEvents='all';
+    setTimeout(()=>{ prev.classList.remove('active'); prev.style.cssText=''; next.style.position=''; next.style.top=''; next.style.left=''; next.style.right=''; },420);
   }
-});
+  updateSteps(); updateFooter();
+  document.getElementById('bmBody').scrollTop=0;
+}
+function bmNext(){
+  if(bmState.step===1){ if(!bmState.day) return; renderSlots(); goSlide(2,true); }
+  else if(bmState.step===2){ if(!bmState.slot) return; goSlide(3,true); }
+  else if(bmState.step===3){ initiatePayment(); }
+}
+function bmBack(){ if(bmState.step>1) goSlide(bmState.step-1,false); }
+
+// ── Payment
+async function initiatePayment(){
+  const fname=document.getElementById('bmFname').value.trim();
+  const lname=document.getElementById('bmLname').value.trim();
+  const email=document.getElementById('bmEmail').value.trim();
+  const phone=document.getElementById('bmPhone').value.trim();
+  const topic=document.getElementById('bmTopic').value.trim();
+
+  if(!fname||!lname){ showToast('Please enter your full name.'); return; }
+  if(!email||!/\S+@\S+\.\S+/.test(email)){ showToast('Please enter a valid email.'); return; }
+  if(!phone){ showToast('Please enter your phone number.'); return; }
+
+  const name=fname+' '+lname;
+  const dateTimeStr=fmtDate(bmState.day)+' · '+bmState.slot+' IST';
+  const timestamp=new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata'});
+  const next=document.getElementById('bmNextBtn');
+  next.disabled=true; next.textContent='Opening payment...';
+
+  try{
+    await fetch(SHEETS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({formType:'payment',name,email,phone,topic,
+        sessionTitle:bmState.session.name, amount:bmState.session.price,
+        dateTime:dateTimeStr, status:'Payment Initiated', timestamp})});
+  }catch(e){}
+
+  const payUrl=RAZORPAY_LINKS[bmState.session.key]
+    +'?prefill[name]='+encodeURIComponent(name)
+    +'&prefill[email]='+encodeURIComponent(email)
+    +'&prefill[contact]='+encodeURIComponent(phone);
+  const pw=600,ph=720,pl=Math.round(screen.width/2-pw/2),pt=Math.round(screen.height/2-ph/2);
+  const payWin=window.open(payUrl,'rzp_pay',`width=${pw},height=${ph},left=${pl},top=${pt},scrollbars=yes`);
+  next.textContent='Waiting for payment...';
+
+  const poll=setInterval(async()=>{
+    if(payWin&&payWin.closed){
+      clearInterval(poll); next.disabled=false;
+      const paid=confirm('Did your payment go through?\n\nClick OK if successful, Cancel if not.');
+      const status=paid?'Payment Successful':'Payment Not Completed';
+      try{
+        await fetch(SHEETS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({formType:'paymentConfirm',name,email,phone,topic,
+            sessionTitle:bmState.session.name, amount:bmState.session.price,
+            dateTime:dateTimeStr, status, sendMail:paid,
+            timestamp:new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata'})})});
+      }catch(e){}
+
+      if(paid){
+        document.getElementById('bmSuccessDetail').innerHTML=`
+          <div class="bm-sd-row"><span class="bm-sd-l">Session</span><span class="bm-sd-v">${bmState.session.name}</span></div>
+          <div class="bm-sd-row"><span class="bm-sd-l">Date &amp; Time</span><span class="bm-sd-v">${dateTimeStr}</span></div>
+          <div class="bm-sd-row"><span class="bm-sd-l">Amount Paid</span><span class="bm-sd-v">${bmState.session.price}</span></div>
+          <div class="bm-sd-row"><span class="bm-sd-l">Name</span><span class="bm-sd-v">${name}</span></div>`;
+        goSlide(4,true);
+        document.querySelectorAll('.bm-step-n').forEach(n=>{ n.classList.add('done'); n.textContent='✓'; });
+      } else {
+        next.textContent='Proceed to Payment →'; next.disabled=false;
+        showToast('Payment not completed. You can try again.');
+      }
+    }
+  },800);
+}
+
+function showToast(msg){
+  let t=document.getElementById('bmToast');
+  if(!t){ t=document.createElement('div'); t.id='bmToast'; t.style.cssText='position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(16px);background:var(--ink-soft);color:var(--white);padding:12px 24px;font-size:13px;z-index:1100;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap;'; document.body.appendChild(t); }
+  t.textContent=msg; t.style.opacity='1'; t.style.transform='translateX(-50%) translateY(0)';
+  setTimeout(()=>{ t.style.opacity='0'; t.style.transform='translateX(-50%) translateY(16px)'; },3200);
+}
+
+// ═══════════ STATS (animated counters + breakdown via JSONP) ═══════════
+const SESSION_LABELS = { '15min':'15-Minute Session', '30min':'30-Minute Session', '45min':'45-Minute Session', '60min':'60-Minute Session' };
+// Fallback shown if the live sheet stats can't be reached yet.
+// Once the Apps Script doGet is deployed, real numbers (seed 75 + bookings) replace this.
+let statsData = { total:75, breakdown:{ '15min':24, '30min':19, '45min':17, '60min':15 } };
+
+// Animate a number counter
+function animateCount(el){
+  const target=+el.dataset.count || 0;
+  const divide=+el.dataset.divide || 1;
+  const suffix=el.dataset.suffix || '';
+  const dur=1400, start=performance.now();
+  function tick(now){
+    const p=Math.min((now-start)/dur,1);
+    const eased=1-Math.pow(1-p,3);
+    let val=Math.round(target*eased/divide);
+    el.textContent=val+suffix;
+    if(p<1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+// Fetch real stats from Apps Script via JSONP
+function loadStats(){
+  window.statsCallback = function(data){
+    statsData = data || { total:0, breakdown:{} };
+    const totalEl=document.getElementById('statTotalN');
+    totalEl.dataset.count = statsData.total || 0;
+    animateCount(totalEl);
+  };
+  const s=document.createElement('script');
+  s.src = SHEETS_URL + '?action=stats&callback=statsCallback&_=' + Date.now();
+  s.onerror=()=>{ /* sheet not reachable — leave at 0 */ };
+  document.body.appendChild(s);
+}
+
+// Animate the other two static stats when section enters view
+const statsObserver=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.querySelectorAll('.dstat-n[data-count]').forEach(el=>{
+        if(el.id!=='statTotalN') animateCount(el);
+      });
+      // animate the sessions counter from the fallback (75) immediately
+      const totalEl=document.getElementById('statTotalN');
+      totalEl.dataset.count = statsData.total;
+      animateCount(totalEl);
+      // then try to refresh with live numbers from the sheet
+      loadStats();
+      statsObserver.unobserve(e.target);
+    }
+  });
+},{threshold:.3});
+const dbar=document.querySelector('.devansh-bar');
+if(dbar) statsObserver.observe(dbar);
+
+// Toggle breakdown panel
+function toggleBreakdown(){
+  const panel=document.getElementById('statsBreakdown');
+  const isOpen=panel.classList.contains('open');
+  if(isOpen){ panel.classList.remove('open'); return; }
+
+  // Build bars
+  const bars=document.getElementById('sbBars');
+  const order=['15min','30min','45min','60min'];
+  const bd=statsData.breakdown||{};
+  const max=Math.max(1, ...order.map(k=>bd[k]||0));
+  bars.innerHTML = order.map(k=>{
+    const v=bd[k]||0;
+    return `<div class="sb-row">
+      <span class="sb-row-label">${SESSION_LABELS[k]}</span>
+      <div class="sb-row-track"><div class="sb-row-fill" data-w="${Math.round((v/max)*100)}"></div></div>
+      <span class="sb-row-val">${v}</span>
+    </div>`;
+  }).join('');
+
+  panel.classList.add('open');
+  // animate fills
+  setTimeout(()=>{ panel.querySelectorAll('.sb-row-fill').forEach(f=>{ f.style.width=f.dataset.w+'%'; }); }, 100);
+}
 </script>
 </body>
 </html>
