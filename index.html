@@ -2357,6 +2357,7 @@ function openBooking(name, price, link){
 function closeBooking(){
   document.getElementById('bmOverlay').classList.remove('open');
   document.body.style.overflow='';
+  if(_pollTimer){ clearInterval(_pollTimer); _pollTimer=null; }
 }
 document.getElementById('bmOverlay').addEventListener('click', e=>{ if(e.target.id==='bmOverlay') closeBooking(); });
 
@@ -2463,7 +2464,9 @@ function bmNext(){
 }
 function bmBack(){ if(bmState.step>1) goSlide(bmState.step-1,false); }
 
-// ── Payment
+// ── Payment (webhook-verified — no self-reporting dialog)
+let _pollTimer = null, _pollCount = 0;
+
 async function initiatePayment(){
   const fname=document.getElementById('bmFname').value.trim();
   const lname=document.getElementById('bmLname').value.trim();
@@ -2475,7 +2478,6 @@ async function initiatePayment(){
   const nameOk = /^[A-Za-z][A-Za-z .'-]{1,}$/;
   if(!nameOk.test(fname) || !nameOk.test(lname)){ showToast('Please enter a valid first and last name.'); return; }
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){ showToast('Please enter a valid email address.'); return; }
-  // Indian phone: 10 digits, optionally +91 / 0 prefix
   const phoneDigits = phone.replace(/[^\d]/g,'').replace(/^91/,'').replace(/^0/,'');
   if(phoneDigits.length!==10 || !/^[6-9]/.test(phoneDigits)){ showToast('Please enter a valid 10-digit mobile number.'); return; }
   phone = '+91' + phoneDigits;
@@ -2483,18 +2485,21 @@ async function initiatePayment(){
   const name=fname+' '+lname;
   const dateTimeStr=fmtDate(bmState.day)+' · '+bmState.slot+' IST';
   const timestamp=new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata'});
+  // Unique reference so we can poll the sheet for THIS exact booking
+  const bookingRef = 'BK' + Date.now() + Math.floor(Math.random()*1000);
+
   const next=document.getElementById('bmNextBtn');
+  const back=document.getElementById('bmBackBtn');
   next.disabled=true; next.textContent='Opening payment...';
 
-  // Log the attempt (Payment Initiated)
+  // Log the attempt (Payment Initiated) with the ref
   try{
     await fetch(SHEETS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({formType:'payment',name,email,phone,topic,
         sessionTitle:bmState.session.name, amount:bmState.session.price,
-        dateTime:dateTimeStr, status:'Payment Initiated', timestamp})});
+        dateTime:dateTimeStr, status:'Payment Initiated', timestamp, ref:bookingRef})});
   }catch(e){}
 
-  // Build the Razorpay link (now passed directly — never undefined)
   const baseLink = bmState.session.link;
   if(!baseLink || baseLink.indexOf('rzp.io')===-1){
     showToast('Payment link missing for this session. Please contact us.');
@@ -2509,72 +2514,57 @@ async function initiatePayment(){
   const pw=600,ph=720,pl=Math.round(screen.width/2-pw/2),pt=Math.round(screen.height/2-ph/2);
   const payWin=window.open(payUrl,'rzp_pay',`width=${pw},height=${ph},left=${pl},top=${pt},scrollbars=yes`);
   if(!payWin){ showToast('Please allow popups to complete payment.'); next.textContent='Proceed to Payment →'; next.disabled=false; return; }
-  next.textContent='Waiting for payment...';
 
-  let verified=false;
+  // Switch UI into "verifying" mode — we now wait for Razorpay's webhook to
+  // mark this booking paid in the sheet, then confirm automatically.
+  next.textContent='Waiting for payment…';
+  back.style.visibility='hidden';
+  document.getElementById('bmFootNote').textContent='Complete payment in the Razorpay window — this updates automatically.';
 
-  async function finalize(paid){
-    const status = paid ? 'Payment Successful' : 'Payment Not Completed';
-    try{
-      await fetch(SHEETS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({formType:'paymentConfirm',name,email,phone,topic,
-          sessionTitle:bmState.session.name, amount:bmState.session.price,
-          dateTime:dateTimeStr, status, sendMail:paid,
-          timestamp:new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata'})})});
-    }catch(e){}
+  const confirmedDetail = ()=>{
+    document.getElementById('bmSuccessDetail').innerHTML=`
+      <div class="bm-sd-row"><span class="bm-sd-l">Session</span><span class="bm-sd-v">${bmState.session.name}</span></div>
+      <div class="bm-sd-row"><span class="bm-sd-l">Date &amp; Time</span><span class="bm-sd-v">${dateTimeStr}</span></div>
+      <div class="bm-sd-row"><span class="bm-sd-l">Amount Paid</span><span class="bm-sd-v">${bmState.session.price}</span></div>
+      <div class="bm-sd-row"><span class="bm-sd-l">Name</span><span class="bm-sd-v">${name}</span></div>`;
+    goSlide(4,true);
+    document.querySelectorAll('.bm-step-n').forEach(n=>{ n.classList.add('done'); n.textContent='✓'; });
+  };
 
-    if(paid){
-      document.getElementById('bmSuccessDetail').innerHTML=`
-        <div class="bm-sd-row"><span class="bm-sd-l">Session</span><span class="bm-sd-v">${bmState.session.name}</span></div>
-        <div class="bm-sd-row"><span class="bm-sd-l">Date &amp; Time</span><span class="bm-sd-v">${dateTimeStr}</span></div>
-        <div class="bm-sd-row"><span class="bm-sd-l">Amount Paid</span><span class="bm-sd-v">${bmState.session.price}</span></div>
-        <div class="bm-sd-row"><span class="bm-sd-l">Name</span><span class="bm-sd-v">${name}</span></div>`;
-      goSlide(4,true);
-      document.querySelectorAll('.bm-step-n').forEach(n=>{ n.classList.add('done'); n.textContent='✓'; });
-    } else {
-      next.textContent='Proceed to Payment →'; next.disabled=false;
-      showToast('Payment not completed. You can try again.');
+  // ── Poll the sheet (via JSONP) for real paid status ──
+  if(_pollTimer){ clearInterval(_pollTimer); }
+  _pollCount = 0;
+  const MAX_POLLS = 150; // ~10 min at 4s
+
+  function checkOnce(){
+    _pollCount++;
+    const cbName = 'rzpCheck_' + bookingRef;
+    window[cbName] = function(res){
+      if(res && res.paid){
+        clearInterval(_pollTimer); _pollTimer=null;
+        try{ payWin.close(); }catch(e){}
+        confirmedDetail();
+      }
+      // cleanup the temp script + callback
+      const s=document.getElementById('s_'+cbName); if(s) s.remove();
+      try{ delete window[cbName]; }catch(e){ window[cbName]=undefined; }
+    };
+    const s=document.createElement('script');
+    s.id='s_'+cbName;
+    s.src=SHEETS_URL+'?action=check&ref='+encodeURIComponent(bookingRef)+'&callback='+cbName+'&_='+Date.now();
+    s.onerror=()=>{ const x=document.getElementById('s_'+cbName); if(x) x.remove(); };
+    document.body.appendChild(s);
+
+    // Give up after MAX_POLLS — show a neutral, honest message (never a fake confirm)
+    if(_pollCount>=MAX_POLLS){
+      clearInterval(_pollTimer); _pollTimer=null;
+      next.disabled=false; next.textContent='Proceed to Payment →'; back.style.visibility='visible';
+      document.getElementById('bmFootNote').textContent='';
+      showToast("If you've paid, you'll get a confirmation email shortly.");
     }
   }
-
-  // Poll the popup. Once Razorpay finishes it redirects back to our domain
-  // (the link's configured callback URL) carrying razorpay_payment_id /
-  // razorpay_payment_link_status=paid — at that point the popup is same-origin
-  // and we can READ the real status instead of asking the user.
-  const poll=setInterval(()=>{
-    // 1) Try to read popup URL — only succeeds once it's back on our domain
-    if(payWin && !payWin.closed){
-      try{
-        const href = payWin.location.href; // throws while still on razorpay.com
-        if(href.indexOf('razorpay_payment_link_status=paid')!==-1 ||
-           href.indexOf('razorpay_payment_id=')!==-1){
-          verified=true;
-          clearInterval(poll);
-          try{ payWin.close(); }catch(e){}
-          finalize(true);
-          return;
-        }
-        if(href.indexOf('razorpay_payment_link_status=cancelled')!==-1){
-          verified=true;
-          clearInterval(poll);
-          try{ payWin.close(); }catch(e){}
-          finalize(false);
-          return;
-        }
-      }catch(e){ /* still on razorpay.com, cross-origin — keep waiting */ }
-    }
-
-    // 2) Window closed without a detected redirect
-    if(payWin && payWin.closed){
-      clearInterval(poll);
-      next.disabled=false;
-      if(verified) return;
-      // Couldn't auto-verify (callback URL not configured / closed early).
-      // Don't claim success — confirm gently, default to NOT paid.
-      const paid=confirm('Did Razorpay confirm your payment was successful?\n\nOnly click OK if you saw the Razorpay success screen and received a payment ID.');
-      finalize(paid);
-    }
-  },600);
+  checkOnce();
+  _pollTimer = setInterval(checkOnce, 4000);
 }
 
 function showToast(msg){
