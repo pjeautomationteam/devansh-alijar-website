@@ -1745,7 +1745,7 @@ footer {
   <!-- SESSION CARDS -->
   <div class="session-list rv d3">
 
-    <div class="sc" onclick="openBooking('20-Minute Session','₹5,000',5000,'20min')">
+    <div class="sc" onclick="openBooking('20-Minute Session','₹5,000','https://rzp.io/rzp/jZPdrwd')">
       <div class="sc-dur"><div class="sc-dur-n">20</div><div class="sc-dur-u">min</div></div>
       <div class="sc-info">
         <div class="sc-tag">Quick Clarity · Video Call</div>
@@ -1759,7 +1759,7 @@ footer {
       </div>
     </div>
 
-    <div class="sc" onclick="openBooking('30-Minute Session','₹12,000',12000,'30min')">
+    <div class="sc" onclick="openBooking('30-Minute Session','₹12,000','https://rzp.io/rzp/ITirWkt4')">
       <div class="sc-dur"><div class="sc-dur-n">30</div><div class="sc-dur-u">min</div></div>
       <div class="sc-info">
         <div class="sc-tag">Deep Dive · Video Call</div>
@@ -1773,7 +1773,7 @@ footer {
       </div>
     </div>
 
-    <div class="sc" onclick="openBooking('45-Minute Session','₹15,000',15000,'45min')">
+    <div class="sc" onclick="openBooking('45-Minute Session','₹15,000','https://rzp.io/rzp/piyceVY')">
       <div class="sc-dur"><div class="sc-dur-n">45</div><div class="sc-dur-u">min</div></div>
       <div class="sc-info">
         <div class="sc-tag">Strategy Session · Video Call</div>
@@ -1787,7 +1787,7 @@ footer {
       </div>
     </div>
 
-    <div class="sc" onclick="openBooking('60-Minute Session','₹25,000',25000,'60min')">
+    <div class="sc" onclick="openBooking('60-Minute Session','₹25,000','https://rzp.io/rzp/HHTljyAj')">
       <div class="sc-dur"><div class="sc-dur-n">60</div><div class="sc-dur-u">min</div></div>
       <div class="sc-info">
         <div class="sc-tag">Full Consultation · Video Call</div>
@@ -2197,7 +2197,7 @@ footer {
 <script>
 // ── NAV
 const nav = document.getElementById('nav');
-window.addEventListener('scroll', () => nav.classList.toggle('stuck', scrollY > 60));
+window.addEventListener('scroll', () => nav.classList.toggle('stuck', scrollY > 60), { passive: true });
 
 // ── REVEAL
 const allRv = document.querySelectorAll('.rv, .rv-left, .rv-scale, .rv-stagger');
@@ -2259,9 +2259,19 @@ if(lbClose) lbClose.addEventListener('click',()=>{ lightbox.classList.remove('op
 if(lightbox) lightbox.addEventListener('click',e=>{ if(e.target===lightbox){ lightbox.classList.remove('open'); document.body.style.overflow=''; } });
 
 // ── HERO PARALLAX
-window.addEventListener('scroll',()=>{
-  if(window.innerWidth>640){ const bg=document.querySelector('.hero-bg-text'); if(bg) bg.style.transform=`translate(-50%,calc(-50% + ${scrollY*.15}px)) scale(${1+scrollY*.0003})`; }
-});
+// ── HERO PARALLAX (throttled with rAF to avoid scroll jank)
+let _parallaxTick = false;
+window.addEventListener('scroll', () => {
+  if (_parallaxTick) return;
+  _parallaxTick = true;
+  requestAnimationFrame(() => {
+    if (window.innerWidth > 640) {
+      const bg = document.querySelector('.hero-bg-text');
+      if (bg) bg.style.transform = `translate(-50%,calc(-50% + ${scrollY*.15}px)) scale(${1+scrollY*.0003})`;
+    }
+    _parallaxTick = false;
+  });
+}, { passive: true });
 
 // ═══════════════════════════════════════════════════════════════
 // BOOKING FLOW
@@ -2288,10 +2298,13 @@ const DAYS   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 let bmState = { session:null, day:null, slot:null, step:1 };
 let calView = new Date(); // currently shown month
 
+// Minimum booking lead time — no slot closer than 24 hours from now.
+const MIN_LEAD_MS = 24 * 60 * 60 * 1000;
+
 function getSlotsForDay(date){
   const ranges=SCHEDULE[date.getDay()]; if(!ranges) return [];
-  const slots=[]; const now=new Date();
-  ranges.forEach(([sh,eh])=>{ for(let h=sh;h<eh;h++){ const sd=new Date(date); sd.setHours(h,0,0,0); if(sd>now) slots.push(formatHour(h)); } });
+  const slots=[]; const cutoff = new Date(Date.now() + MIN_LEAD_MS);
+  ranges.forEach(([sh,eh])=>{ for(let h=sh;h<eh;h++){ const sd=new Date(date); sd.setHours(h,0,0,0); if(sd>=cutoff) slots.push(formatHour(h)); } });
   return slots;
 }
 function isAvailable(date){
@@ -2304,8 +2317,8 @@ function fmtDate(d){ return DAYS[d.getDay()]+', '+d.getDate()+' '+MONTHS[d.getMo
 const MONTHS_FULL = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
 // ── Open / close modal
-function openBooking(name, price, amount, key){
-  bmState = { session:{name,price,amount,key}, day:null, slot:null, step:1 };
+function openBooking(name, price, link){
+  bmState = { session:{name,price,link}, day:null, slot:null, step:1 };
   document.getElementById('bmBadge').textContent = name;
   document.getElementById('bmName').textContent  = name;
   document.getElementById('bmPrice').textContent = price;
@@ -2455,12 +2468,17 @@ async function initiatePayment(){
   const fname=document.getElementById('bmFname').value.trim();
   const lname=document.getElementById('bmLname').value.trim();
   const email=document.getElementById('bmEmail').value.trim();
-  const phone=document.getElementById('bmPhone').value.trim();
+  let   phone=document.getElementById('bmPhone').value.trim();
   const topic=document.getElementById('bmTopic').value.trim();
 
-  if(!fname||!lname){ showToast('Please enter your full name.'); return; }
-  if(!email||!/\S+@\S+\.\S+/.test(email)){ showToast('Please enter a valid email.'); return; }
-  if(!phone){ showToast('Please enter your phone number.'); return; }
+  // ── Validation (filters junk leads) ──
+  const nameOk = /^[A-Za-z][A-Za-z .'-]{1,}$/;
+  if(!nameOk.test(fname) || !nameOk.test(lname)){ showToast('Please enter a valid first and last name.'); return; }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){ showToast('Please enter a valid email address.'); return; }
+  // Indian phone: 10 digits, optionally +91 / 0 prefix
+  const phoneDigits = phone.replace(/[^\d]/g,'').replace(/^91/,'').replace(/^0/,'');
+  if(phoneDigits.length!==10 || !/^[6-9]/.test(phoneDigits)){ showToast('Please enter a valid 10-digit mobile number.'); return; }
+  phone = '+91' + phoneDigits;
 
   const name=fname+' '+lname;
   const dateTimeStr=fmtDate(bmState.day)+' · '+bmState.slot+' IST';
@@ -2468,6 +2486,7 @@ async function initiatePayment(){
   const next=document.getElementById('bmNextBtn');
   next.disabled=true; next.textContent='Opening payment...';
 
+  // Log the attempt (Payment Initiated)
   try{
     await fetch(SHEETS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({formType:'payment',name,email,phone,topic,
@@ -2475,41 +2494,87 @@ async function initiatePayment(){
         dateTime:dateTimeStr, status:'Payment Initiated', timestamp})});
   }catch(e){}
 
-  const payUrl=RAZORPAY_LINKS[bmState.session.key]
+  // Build the Razorpay link (now passed directly — never undefined)
+  const baseLink = bmState.session.link;
+  if(!baseLink || baseLink.indexOf('rzp.io')===-1){
+    showToast('Payment link missing for this session. Please contact us.');
+    next.textContent='Proceed to Payment →'; next.disabled=false;
+    return;
+  }
+  const payUrl=baseLink
     +'?prefill[name]='+encodeURIComponent(name)
     +'&prefill[email]='+encodeURIComponent(email)
     +'&prefill[contact]='+encodeURIComponent(phone);
+
   const pw=600,ph=720,pl=Math.round(screen.width/2-pw/2),pt=Math.round(screen.height/2-ph/2);
   const payWin=window.open(payUrl,'rzp_pay',`width=${pw},height=${ph},left=${pl},top=${pt},scrollbars=yes`);
+  if(!payWin){ showToast('Please allow popups to complete payment.'); next.textContent='Proceed to Payment →'; next.disabled=false; return; }
   next.textContent='Waiting for payment...';
 
-  const poll=setInterval(async()=>{
-    if(payWin&&payWin.closed){
-      clearInterval(poll); next.disabled=false;
-      const paid=confirm('Did your payment go through?\n\nClick OK if successful, Cancel if not.');
-      const status=paid?'Payment Successful':'Payment Not Completed';
-      try{
-        await fetch(SHEETS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({formType:'paymentConfirm',name,email,phone,topic,
-            sessionTitle:bmState.session.name, amount:bmState.session.price,
-            dateTime:dateTimeStr, status, sendMail:paid,
-            timestamp:new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata'})})});
-      }catch(e){}
+  let verified=false;
 
-      if(paid){
-        document.getElementById('bmSuccessDetail').innerHTML=`
-          <div class="bm-sd-row"><span class="bm-sd-l">Session</span><span class="bm-sd-v">${bmState.session.name}</span></div>
-          <div class="bm-sd-row"><span class="bm-sd-l">Date &amp; Time</span><span class="bm-sd-v">${dateTimeStr}</span></div>
-          <div class="bm-sd-row"><span class="bm-sd-l">Amount Paid</span><span class="bm-sd-v">${bmState.session.price}</span></div>
-          <div class="bm-sd-row"><span class="bm-sd-l">Name</span><span class="bm-sd-v">${name}</span></div>`;
-        goSlide(4,true);
-        document.querySelectorAll('.bm-step-n').forEach(n=>{ n.classList.add('done'); n.textContent='✓'; });
-      } else {
-        next.textContent='Proceed to Payment →'; next.disabled=false;
-        showToast('Payment not completed. You can try again.');
-      }
+  async function finalize(paid){
+    const status = paid ? 'Payment Successful' : 'Payment Not Completed';
+    try{
+      await fetch(SHEETS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({formType:'paymentConfirm',name,email,phone,topic,
+          sessionTitle:bmState.session.name, amount:bmState.session.price,
+          dateTime:dateTimeStr, status, sendMail:paid,
+          timestamp:new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata'})})});
+    }catch(e){}
+
+    if(paid){
+      document.getElementById('bmSuccessDetail').innerHTML=`
+        <div class="bm-sd-row"><span class="bm-sd-l">Session</span><span class="bm-sd-v">${bmState.session.name}</span></div>
+        <div class="bm-sd-row"><span class="bm-sd-l">Date &amp; Time</span><span class="bm-sd-v">${dateTimeStr}</span></div>
+        <div class="bm-sd-row"><span class="bm-sd-l">Amount Paid</span><span class="bm-sd-v">${bmState.session.price}</span></div>
+        <div class="bm-sd-row"><span class="bm-sd-l">Name</span><span class="bm-sd-v">${name}</span></div>`;
+      goSlide(4,true);
+      document.querySelectorAll('.bm-step-n').forEach(n=>{ n.classList.add('done'); n.textContent='✓'; });
+    } else {
+      next.textContent='Proceed to Payment →'; next.disabled=false;
+      showToast('Payment not completed. You can try again.');
     }
-  },800);
+  }
+
+  // Poll the popup. Once Razorpay finishes it redirects back to our domain
+  // (the link's configured callback URL) carrying razorpay_payment_id /
+  // razorpay_payment_link_status=paid — at that point the popup is same-origin
+  // and we can READ the real status instead of asking the user.
+  const poll=setInterval(()=>{
+    // 1) Try to read popup URL — only succeeds once it's back on our domain
+    if(payWin && !payWin.closed){
+      try{
+        const href = payWin.location.href; // throws while still on razorpay.com
+        if(href.indexOf('razorpay_payment_link_status=paid')!==-1 ||
+           href.indexOf('razorpay_payment_id=')!==-1){
+          verified=true;
+          clearInterval(poll);
+          try{ payWin.close(); }catch(e){}
+          finalize(true);
+          return;
+        }
+        if(href.indexOf('razorpay_payment_link_status=cancelled')!==-1){
+          verified=true;
+          clearInterval(poll);
+          try{ payWin.close(); }catch(e){}
+          finalize(false);
+          return;
+        }
+      }catch(e){ /* still on razorpay.com, cross-origin — keep waiting */ }
+    }
+
+    // 2) Window closed without a detected redirect
+    if(payWin && payWin.closed){
+      clearInterval(poll);
+      next.disabled=false;
+      if(verified) return;
+      // Couldn't auto-verify (callback URL not configured / closed early).
+      // Don't claim success — confirm gently, default to NOT paid.
+      const paid=confirm('Did Razorpay confirm your payment was successful?\n\nOnly click OK if you saw the Razorpay success screen and received a payment ID.');
+      finalize(paid);
+    }
+  },600);
 }
 
 function showToast(msg){
@@ -2583,7 +2648,7 @@ function toggleBreakdown(){
 
   // Build bars
   const bars=document.getElementById('sbBars');
-  const order=['15min','30min','45min','60min'];
+  const order=['20min','30min','45min','60min'];
   const bd=statsData.breakdown||{};
   const max=Math.max(1, ...order.map(k=>bd[k]||0));
   bars.innerHTML = order.map(k=>{
