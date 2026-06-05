@@ -1745,7 +1745,7 @@ footer {
   <!-- SESSION CARDS -->
   <div class="session-list rv d3">
 
-    <div class="sc" onclick="openBooking('15-Minute Session','₹5,000',5000,'15min')">
+    <div class="sc" onclick="openBooking('15-Minute Session','₹5,000',5000,'20min')">
       <div class="sc-dur"><div class="sc-dur-n">15</div><div class="sc-dur-u">min</div></div>
       <div class="sc-info">
         <div class="sc-tag">Quick Clarity · Video Call</div>
@@ -2312,10 +2312,31 @@ function openBooking(name, price, amount, key){
 
   calView = new Date(); calView.setDate(1);
   renderCalendar();
-  // reset to step 1 instantly
-  [1,2,3,4].forEach(n=>document.getElementById('bmSlide'+n).classList.remove('active'));
+
+  // Hard reset every slide — remove .active AND clear any leftover inline
+  // styles from a previous booking's slide animation (this is what caused
+  // the success slide to stay visible over the calendar).
+  [1,2,3,4].forEach(n=>{
+    const s=document.getElementById('bmSlide'+n);
+    s.classList.remove('active');
+    s.style.cssText='';
+  });
   document.getElementById('bmSlide1').classList.add('active');
+
+  // Reset step circles back to 1 (they get marked done after a payment)
+  document.querySelectorAll('.bm-step-n').forEach((n,i)=>{ n.textContent=i+1; });
+
+  // Clear the details form
+  ['bmFname','bmLname','bmEmail','bmPhone','bmTopic'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.value='';
+  });
+
+  // Reset footer button label/state
+  const nextBtn=document.getElementById('bmNextBtn');
+  nextBtn.disabled=true; nextBtn.textContent='Continue →';
+
   bmState.step=1; updateSteps(); updateFooter();
+  document.getElementById('bmBody').scrollTop=0;
 
   document.getElementById('bmOverlay').classList.add('open');
   document.body.style.overflow='hidden';
